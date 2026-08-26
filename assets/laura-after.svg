@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800" role="img" aria-label="AFTER — Laura + family placeholder">
+  <rect width="800" height="800" fill="#F6EDE4"/>
+  <rect x="18" y="18" width="764" height="764" rx="20" fill="none" stroke="#D8C4B2" stroke-width="3" stroke-dasharray="14 12"/>
+  <g transform="translate(400 310)" stroke="#C25B45" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="-42" y="-30" width="84" height="64" rx="10"/>
+    <circle cx="0" cy="4" r="17"/>
+    <path d="M-24 -30l9-13h30l9 13"/>
+  </g>
+  <text x="400" y="382" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2.4" fill="#C25B45">REPLACE WITH REAL PHOTO</text>
+  <text x="400" y="416" text-anchor="middle" font-family="Georgia, serif" font-size="26" font-weight="700" fill="#1C1714">AFTER — Laura + family</text>
+    <text x="400" y="442" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#7A6C63">Clear skin, with her family, same light.</text>
+    <text x="400" y="468" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#7A6C63">Matching framing is what makes it believable.</text>
+    <text x="400" y="494" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#7A6C63">Save over: assets/laura-after.jpg (square 1:1)</text>
+</svg>
