@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claim Your Spot — Skin by Laura Lo</title>
+<meta name="description" content="About 7 minutes. Tell Laura about your skin, upload your photos, and get your free personalized audit within 48 hours.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="fx-body">
+
+<header class="fx-header">
+  <div class="fx-header__inner">
+    <a class="fx-back" href="index.html">&larr; Skin by Laura Lo</a>
+    <span class="fx-spots" data-fx-spots><span data-spots-remaining>5</span> of <span data-spots-total>5</span> spots left</span>
+  </div>
+</header>
+
+<main class="fx-main">
+
+  <!-- ============================================================
+       THE WIZARD — shown when spots remain this week.
+       Six short steps, one question group each. Validation only
+       checks the step that's on screen, so nothing feels blocked
+       by a question three steps away.
+       ============================================================ -->
+  <div class="fx-shell" data-panel="wizard">
+    <div class="fx-split">
+      <div class="fx-panel--intro">
+        <span class="fx-spots-inline">
+          <span class="dot" aria-hidden="true"></span>
+          <span><span data-spots-remaining>5</span> of <span data-spots-total>5</span> spots left</span>
+        </span>
+        <h1>Claim your spot</h1>
+        <p>About 7 minutes. If you don&rsquo;t know an answer, say so &mdash; &ldquo;I don&rsquo;t know&rdquo; is a real answer here.</p>
+        <div class="fx-reassure">
+          <h4>No AI. No template.</h4>
+          <p>Just Laura, reading your answers herself and building your routine by hand.</p>
+        </div>
+      </div>
+
+      <div class="fx-panel--form">
+    <div class="fx-progress">
+      <div class="fx-progress__track"><div class="fx-progress__bar" data-fx-bar></div></div>
+      <div class="fx-progress__label">
+        <span data-fx-step-label>Step 1 of 6</span>
+        <span data-fx-step-name>Where to send it</span>
+      </div>
+    </div>
+
+    <form class="fx-form" id="audit-form" novalidate>
+
+      <section class="fx-step is-active" data-step data-step-name="Where to send it">
+        <h2>Where should I send it?</h2>
+        <div class="field">
+          <label for="name">Your name</label>
+          <input type="text" id="name" name="name" autocomplete="given-name" required>
+        </div>
+        <div class="field">
+          <label for="handle">Your Instagram handle</label>
+          <input type="text" id="handle" name="handle" placeholder="@yourhandle" required>
+          <p class="hint">This is where your audit gets delivered.</p>
+        </div>
+      </section>
+
+      <section class="fx-step" data-step data-step-name="Your main concern">
+        <h2>Let&rsquo;s start with the big one</h2>
+        <div class="field">
+          <span class="label" id="q1-label">1. What&rsquo;s your #1 skin concern right now?</span>
+          <p class="hint">Pick the one that bothers you most.</p>
+          <div class="chips" role="radiogroup" aria-labelledby="q1-label">
+            <label class="chip"><input type="radio" name="concern" value="Breakouts" required><span>Breakouts</span></label>
+            <label class="chip"><input type="radio" name="concern" value="Dullness"><span>Dullness</span></label>
+            <label class="chip"><input type="radio" name="concern" value="Uneven tone"><span>Uneven tone</span></label>
+            <label class="chip"><input type="radio" name="concern" value="Texture"><span>Texture</span></label>
+            <label class="chip"><input type="radio" name="concern" value="Redness"><span>Redness</span></label>
+            <label class="chip"><input type="radio" name="concern" value="I don't know"><span>I don&rsquo;t know</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="duration">2. How long have you been dealing with it?</label>
+          <select id="duration" name="duration" required>
+            <option value="" disabled selected>Choose one</option>
+            <option>Less than 3 months</option>
+            <option>3&ndash;12 months</option>
+            <option>1&ndash;3 years</option>
+            <option>More than 3 years</option>
+            <option>Since I was a teenager</option>
+            <option>I don&rsquo;t know</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="fx-step" data-step data-step-name="What you've tried">
+        <h2>What you&rsquo;ve already tried</h2>
+        <div class="field">
+          <label for="tried">3. What have you already tried?</label>
+          <p class="hint">Products, treatments, routines &mdash; whatever you remember. &ldquo;I don&rsquo;t know&rdquo; is fine.</p>
+          <textarea id="tried" name="tried" rows="4" required></textarea>
+        </div>
+        <div class="field">
+          <span class="label" id="q4-label">4. What happened when you tried them?</span>
+          <div class="chips" role="radiogroup" aria-labelledby="q4-label">
+            <label class="chip"><input type="radio" name="result" value="Worked briefly" required><span>Worked briefly</span></label>
+            <label class="chip"><input type="radio" name="result" value="Made it worse"><span>Made it worse</span></label>
+            <label class="chip"><input type="radio" name="result" value="Nothing changed"><span>Nothing changed</span></label>
+            <label class="chip"><input type="radio" name="result" value="I don't know"><span>I don&rsquo;t know</span></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="fx-step" data-step data-step-name="Your routine">
+        <h2>Your routine right now</h2>
+        <div class="field">
+          <label for="am">5. Your current morning routine &mdash; every product, in order</label>
+          <p class="hint">Even if it&rsquo;s &ldquo;water and whatever&rsquo;s in the shower.&rdquo; Honest beats impressive.</p>
+          <textarea id="am" name="morning_routine" rows="4" required></textarea>
+        </div>
+        <div class="field">
+          <label for="pm">6. Your current night routine &mdash; every product, in order</label>
+          <p class="hint">If some nights you skip it entirely, tell me that too.</p>
+          <textarea id="pm" name="night_routine" rows="4" required></textarea>
+        </div>
+        <div class="field">
+          <span class="label" id="q7-label">7. How does your skin feel 1 hour after washing?</span>
+          <div class="chips" role="radiogroup" aria-labelledby="q7-label">
+            <label class="chip"><input type="radio" name="after_wash" value="Tight" required><span>Tight</span></label>
+            <label class="chip"><input type="radio" name="after_wash" value="Oily"><span>Oily</span></label>
+            <label class="chip"><input type="radio" name="after_wash" value="Normal"><span>Normal</span></label>
+            <label class="chip"><input type="radio" name="after_wash" value="Combination"><span>Combination</span></label>
+            <label class="chip"><input type="radio" name="after_wash" value="I don't know"><span>I don&rsquo;t know</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="lifestyle">8. What does your typical day look like &mdash; water, sleep, stress? <span class="optional">optional but helpful</span></label>
+          <textarea id="lifestyle" name="lifestyle" rows="3"></textarea>
+        </div>
+      </section>
+
+      <section class="fx-step" data-step data-step-name="Your photos">
+        <h2>Your photos</h2>
+        <div class="privacy">
+          <h3>The Just-Between-Us Promise</h3>
+          <p>Your photos go to me and only me. They are never shared, posted, or used anywhere &mdash; ever &mdash; without you explicitly telling me it&rsquo;s okay.</p>
+        </div>
+
+        <div class="field">
+          <span class="label">9. Upload 3 photos &mdash; bare skin, natural light, no filter</span>
+          <p class="hint">Front, left side, right side. <a href="assets/photo-guide.svg" target="_blank" rel="noopener">See the photo guide &rarr;</a></p>
+          <div class="uploads">
+            <label class="upload" data-upload>
+              <input type="file" name="photo_front" accept="image/*" required>
+              <span class="upload__label">Front</span>
+              <span class="upload__state">Tap to upload</span>
+            </label>
+            <label class="upload" data-upload>
+              <input type="file" name="photo_left" accept="image/*" required>
+              <span class="upload__label">Left side</span>
+              <span class="upload__state">Tap to upload</span>
+            </label>
+            <label class="upload" data-upload>
+              <input type="file" name="photo_right" accept="image/*" required>
+              <span class="upload__label">Right side</span>
+              <span class="upload__state">Tap to upload</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="label">10. Upload a photo of your current skincare products together</span>
+          <p class="hint">Your &ldquo;shelfie.&rdquo; Everything you use, in one shot. <a href="assets/shelfie-example.svg" target="_blank" rel="noopener">See an example &rarr;</a></p>
+          <div class="uploads uploads--single">
+            <label class="upload" data-upload>
+              <input type="file" name="photo_shelfie" accept="image/*" required>
+              <span class="upload__label">Shelfie</span>
+              <span class="upload__state">Tap to upload</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="fx-step" data-step data-step-name="Send it to Laura">
+        <h2>Last thing</h2>
+        <label class="optin">
+          <input type="checkbox" name="optin" required>
+          <span>I agree to receive my audit and any follow-up from Laura via Instagram DM. Nothing else &mdash; no newsletters, no spam.</span>
+        </label>
+        <p class="fx-step-note"><span data-spots-remaining>5</span> of <span data-spots-total>5</span> spots left this week. Spots go to whoever completes their full form first.</p>
+      </section>
+
+      <p class="form__error" data-form-error role="alert" hidden></p>
+    </form>
+
+    <div class="fx-nav">
+      <button type="button" class="btn btn--back" data-fx-back hidden>&larr; Back</button>
+      <button type="button" class="btn btn--peach" data-fx-next>Next <span aria-hidden="true">&rarr;</span></button>
+      <button type="submit" form="audit-form" class="btn btn--peach" data-fx-submit hidden>Send My Audit to Laura <span aria-hidden="true">&rarr;</span></button>
+    </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shown after a successful submit -->
+  <div class="fx-shell fx-shell--narrow" data-panel="confirm" hidden>
+    <div class="confirm">
+      <h3>Got it &mdash; your spot is claimed.</h3>
+      <p>I&rsquo;ll read everything myself and send your audit to your Instagram DMs within 48 hours. If you don&rsquo;t hear from me in that window, your spot rolls to next week &mdash; no need to resubmit.</p>
+      <p class="confirm__sig">&mdash; Laura</p>
+      <a class="fx-back fx-back--confirm" href="index.html">&larr; Back to the page</a>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       THE WAITLIST — shown instead of the wizard once
+       config.js spotsRemaining hits 0.
+       ============================================================ -->
+  <div class="fx-shell fx-shell--narrow" data-panel="waitlist" hidden>
+    <div class="fx-intro">
+      <h1>This week&rsquo;s 5 spots are already taken.</h1>
+      <p>Join the waitlist and you&rsquo;ll be the first person I message when next week&rsquo;s spots open &mdash; before I post it publicly. Waitlist spots get first access, every time.</p>
+    </div>
+
+    <form class="form form--short" id="waitlist-form" novalidate>
+      <div class="field">
+        <label for="wl-name">Name</label>
+        <input type="text" id="wl-name" name="name" autocomplete="given-name" required>
+      </div>
+      <div class="field">
+        <label for="wl-handle">Instagram handle (or email)</label>
+        <input type="text" id="wl-handle" name="handle" placeholder="@yourhandle" required>
+      </div>
+      <p class="form__error" data-form-error role="alert" hidden></p>
+      <button class="btn btn--peach btn--xl btn--block" type="submit">Join the Waitlist <span aria-hidden="true">&rarr;</span></button>
+    </form>
+  </div>
+
+  <div class="fx-shell fx-shell--narrow" data-panel="waitlist-confirm" hidden>
+    <div class="confirm">
+      <h3>You&rsquo;re on the list.</h3>
+      <p>I&rsquo;ll message you directly Monday morning before spots go live.</p>
+      <p class="confirm__sig">&mdash; Laura</p>
+      <a class="fx-back fx-back--confirm" href="index.html">&larr; Back to the page</a>
+    </div>
+  </div>
+
+</main>
+
+<script src="config.js"></script>
+<script src="form.js"></script>
+</body>
+</html>
