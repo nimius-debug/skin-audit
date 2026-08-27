@@ -113,7 +113,7 @@ async function handleSubmit(request, env) {
   }
 
   if (!data.name || !data.handle) {
-    return json({ error: "missing_contact", message: "Name and Instagram handle are required." }, 400);
+    return json({ error: "missing_contact", message: "Name and Instagram handle or email are required." }, 400);
   }
   if (!form.get("optin")) {
     return json({ error: "missing_optin", message: "The DM opt-in is required." }, 400);
@@ -372,7 +372,7 @@ async function handleExport(request, env) {
     const csv = toCsv(results, [
       { key: "created_at", label: "Joined" },
       { key: "name", label: "Name" },
-      { key: "handle", label: "Instagram / email" }
+      { key: "handle", label: "Instagram / Email" }
     ]);
     return new Response(csv, {
       headers: {
@@ -398,7 +398,7 @@ async function handleExport(request, env) {
     { key: "created_at", label: "Submitted" },
     { key: "status", label: "Status" },
     { key: "name", label: "Name" },
-    { key: "handle", label: "Instagram" },
+    { key: "handle", label: "Instagram / Email" },
     { key: "concern", label: "1. Main concern" },
     { key: "duration", label: "2. How long" },
     { key: "tried", label: "3. Already tried" },
