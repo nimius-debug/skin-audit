@@ -26,6 +26,20 @@ schema.sql       database schema (already applied)
 
 Tables `submissions` and `waitlist` are live in D1 already.
 
+## Requirements
+
+**Node.js 22 or newer** — Wrangler 4 refuses to run on anything older.
+`.nvmrc` pins it, so with nvm installed:
+
+```bash
+nvm use        # reads .nvmrc
+# or, the first time:
+nvm install 22
+```
+
+Check with `node -v`. Cloudflare's build system reads `.nvmrc` too, so
+dashboard builds get the same version.
+
 ## Deploying
 
 **1. Enable R2 once** (Cloudflare requires accepting R2 terms in the dashboard
