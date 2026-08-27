@@ -27,18 +27,30 @@
       <h1 class="hero__headline">Stop buying products that don&rsquo;t work.</h1>
       <p class="hero__sub">Get a free personalized skin audit &mdash; built for moms.</p>
       <p class="hero__body">Your skin. Finally clearing up.<br>With a routine built just for you.</p>
-      <a class="btn btn--primary btn--xl" href="#claim" data-cta="hero">Claim My Free Spot <span aria-hidden="true">&rarr;</span></a>
+      <a class="btn btn--primary btn--xl" href="form.html" target="_blank" rel="noopener" data-cta="hero">Claim My Free Spot <span aria-hidden="true">&rarr;</span></a>
       <p class="btn__note">
         <span class="dot" aria-hidden="true"></span>
         <span><span data-spots-total>5</span> spots this week. <strong><span data-spots-remaining>5</span> remaining.</strong></span>
       </p>
     </div>
 
-    <figure class="hero__photo">
-      <!-- REPLACE: assets/laura-hero.jpg — Laura with her baby, natural light, no studio polish. -->
-      <img src="assets/laura-hero.svg" alt="Laura, a licensed esthetician, holding her baby" width="720" height="900">
-      <figcaption>Laura &mdash; licensed esthetician, mom of 2.</figcaption>
-    </figure>
+    <div class="hero__visual">
+      <span class="hero__ring" aria-hidden="true"></span>
+
+      <figure class="hero__photo hero__photo--main">
+        <span class="hero__tag">MOM OF 2 &middot; LICENSED ESTHETICIAN</span>
+        <!-- REPLACE: assets/laura-hero.jpg — Laura with her baby, natural light, no studio polish. -->
+        <img src="assets/laura-hero.svg" alt="Laura, a licensed esthetician, holding her baby" width="720" height="900">
+      </figure>
+
+      <figure class="hero__photo hero__photo--before">
+        <span class="hero__tag hero__tag--dark">BEFORE</span>
+        <!-- REPLACE: assets/laura-before.jpg — Laura's own skin before, bare, natural light, no filter. -->
+        <img src="assets/laura-before.svg" alt="Laura's own skin before — breakouts, bare face" width="420" height="420">
+      </figure>
+
+      <p class="hero__visual-caption">This was her skin too.</p>
+    </div>
   </div>
 </header>
 
@@ -161,7 +173,7 @@
       </li>
     </ul>
 
-    <a class="btn btn--primary btn--xl btn--block" href="#claim" data-cta="stack">Claim My Free Spot <span aria-hidden="true">&rarr;</span></a>
+    <a class="btn btn--primary btn--xl btn--block" href="form.html" target="_blank" rel="noopener" data-cta="stack">Claim My Free Spot <span aria-hidden="true">&rarr;</span></a>
     <p class="btn__note btn__note--center"><span><span data-spots-remaining>5</span> of <span data-spots-total>5</span> spots left this week.</span></p>
   </div>
 </section>
@@ -225,201 +237,10 @@
     <p class="urgency__line">New spots open every Monday. This week&rsquo;s audits go out Friday &mdash; miss this week, wait until next.</p>
     <p class="urgency__line urgency__line--muted">Spots go to whoever completes their full form first &mdash; not whoever comments first.</p>
     <p class="urgency__countdown" data-countdown hidden>Submissions close in <strong data-countdown-value>&mdash;</strong></p>
+    <a class="btn btn--primary btn--xl btn--block" href="form.html" target="_blank" rel="noopener" data-cta="urgency">Claim My Free Spot <span aria-hidden="true">&rarr;</span></a>
   </div>
 </section>
 
-<!-- ============================================================
-     SECTION 8 — THE FORM
-     Job: Convert. Auto-swaps to Section 9 when spots hit 0.
-     ============================================================ -->
-<section class="section formsection" id="claim" data-panel="form">
-  <div class="wrap wrap--narrow">
-    <h2 class="section__header">Claim your spot</h2>
-    <p class="form__intro">About 7 minutes. If you don&rsquo;t know an answer, say so &mdash; &ldquo;I don&rsquo;t know&rdquo; is a real answer here.</p>
-
-    <form class="form" id="audit-form" novalidate>
-      <fieldset class="fieldset">
-        <legend>Where should I send it?</legend>
-        <div class="field">
-          <label for="name">Your name</label>
-          <input type="text" id="name" name="name" autocomplete="given-name" required>
-        </div>
-        <div class="field">
-          <label for="handle">Your Instagram handle</label>
-          <input type="text" id="handle" name="handle" placeholder="@yourhandle" required>
-          <p class="hint">This is where your audit gets delivered.</p>
-        </div>
-      </fieldset>
-
-      <fieldset class="fieldset">
-        <legend>Your skin</legend>
-
-        <div class="field">
-          <span class="label" id="q1-label">1. What&rsquo;s your #1 skin concern right now?</span>
-          <p class="hint">Pick the one that bothers you most.</p>
-          <div class="chips" role="radiogroup" aria-labelledby="q1-label">
-            <label class="chip"><input type="radio" name="concern" value="Breakouts" required><span>Breakouts</span></label>
-            <label class="chip"><input type="radio" name="concern" value="Dullness"><span>Dullness</span></label>
-            <label class="chip"><input type="radio" name="concern" value="Uneven tone"><span>Uneven tone</span></label>
-            <label class="chip"><input type="radio" name="concern" value="Texture"><span>Texture</span></label>
-            <label class="chip"><input type="radio" name="concern" value="Redness"><span>Redness</span></label>
-            <label class="chip"><input type="radio" name="concern" value="I don't know"><span>I don&rsquo;t know</span></label>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="duration">2. How long have you been dealing with it?</label>
-          <select id="duration" name="duration" required>
-            <option value="" disabled selected>Choose one</option>
-            <option>Less than 3 months</option>
-            <option>3&ndash;12 months</option>
-            <option>1&ndash;3 years</option>
-            <option>More than 3 years</option>
-            <option>Since I was a teenager</option>
-            <option>I don&rsquo;t know</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="tried">3. What have you already tried?</label>
-          <p class="hint">Products, treatments, routines &mdash; whatever you remember. &ldquo;I don&rsquo;t know&rdquo; is fine.</p>
-          <textarea id="tried" name="tried" rows="4" required></textarea>
-        </div>
-
-        <div class="field">
-          <span class="label" id="q4-label">4. What happened when you tried them?</span>
-          <div class="chips" role="radiogroup" aria-labelledby="q4-label">
-            <label class="chip"><input type="radio" name="result" value="Worked briefly" required><span>Worked briefly</span></label>
-            <label class="chip"><input type="radio" name="result" value="Made it worse"><span>Made it worse</span></label>
-            <label class="chip"><input type="radio" name="result" value="Nothing changed"><span>Nothing changed</span></label>
-            <label class="chip"><input type="radio" name="result" value="I don't know"><span>I don&rsquo;t know</span></label>
-          </div>
-        </div>
-      </fieldset>
-
-      <fieldset class="fieldset">
-        <legend>Your routine right now</legend>
-
-        <div class="field">
-          <label for="am">5. Your current morning routine &mdash; every product, in order</label>
-          <p class="hint">Even if it&rsquo;s &ldquo;water and whatever&rsquo;s in the shower.&rdquo; Honest beats impressive.</p>
-          <textarea id="am" name="morning_routine" rows="4" required></textarea>
-        </div>
-
-        <div class="field">
-          <label for="pm">6. Your current night routine &mdash; every product, in order</label>
-          <p class="hint">If some nights you skip it entirely, tell me that too.</p>
-          <textarea id="pm" name="night_routine" rows="4" required></textarea>
-        </div>
-
-        <div class="field">
-          <span class="label" id="q7-label">7. How does your skin feel 1 hour after washing?</span>
-          <div class="chips" role="radiogroup" aria-labelledby="q7-label">
-            <label class="chip"><input type="radio" name="after_wash" value="Tight" required><span>Tight</span></label>
-            <label class="chip"><input type="radio" name="after_wash" value="Oily"><span>Oily</span></label>
-            <label class="chip"><input type="radio" name="after_wash" value="Normal"><span>Normal</span></label>
-            <label class="chip"><input type="radio" name="after_wash" value="Combination"><span>Combination</span></label>
-            <label class="chip"><input type="radio" name="after_wash" value="I don't know"><span>I don&rsquo;t know</span></label>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="lifestyle">8. What does your typical day look like &mdash; water, sleep, stress? <span class="optional">optional but helpful</span></label>
-          <textarea id="lifestyle" name="lifestyle" rows="3"></textarea>
-        </div>
-      </fieldset>
-
-      <div class="privacy">
-        <h3>The Just-Between-Us Promise</h3>
-        <p>Your photos go to me and only me. They are never shared, posted, or used anywhere &mdash; ever &mdash; without you explicitly telling me it&rsquo;s okay.</p>
-      </div>
-
-      <fieldset class="fieldset">
-        <legend>Your photos</legend>
-
-        <div class="field">
-          <span class="label">9. Upload 3 photos &mdash; bare skin, natural light, no filter</span>
-          <p class="hint">Front, left side, right side. <a href="assets/photo-guide.svg" target="_blank" rel="noopener">See the photo guide &rarr;</a></p>
-          <div class="uploads">
-            <label class="upload" data-upload>
-              <input type="file" name="photo_front" accept="image/*" required>
-              <span class="upload__label">Front</span>
-              <span class="upload__state">Tap to upload</span>
-            </label>
-            <label class="upload" data-upload>
-              <input type="file" name="photo_left" accept="image/*" required>
-              <span class="upload__label">Left side</span>
-              <span class="upload__state">Tap to upload</span>
-            </label>
-            <label class="upload" data-upload>
-              <input type="file" name="photo_right" accept="image/*" required>
-              <span class="upload__label">Right side</span>
-              <span class="upload__state">Tap to upload</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="field">
-          <span class="label">10. Upload a photo of your current skincare products together</span>
-          <p class="hint">Your &ldquo;shelfie.&rdquo; Everything you use, in one shot. <a href="assets/shelfie-example.svg" target="_blank" rel="noopener">See an example &rarr;</a></p>
-          <div class="uploads uploads--single">
-            <label class="upload" data-upload>
-              <input type="file" name="photo_shelfie" accept="image/*" required>
-              <span class="upload__label">Shelfie</span>
-              <span class="upload__state">Tap to upload</span>
-            </label>
-          </div>
-        </div>
-      </fieldset>
-
-      <label class="optin">
-        <input type="checkbox" name="optin" required>
-        <span>I agree to receive my audit and any follow-up from Laura via Instagram DM. Nothing else &mdash; no newsletters, no spam.</span>
-      </label>
-
-      <p class="form__error" data-form-error role="alert" hidden></p>
-
-      <button class="btn btn--primary btn--xl btn--block" type="submit">Send My Audit to Laura <span aria-hidden="true">&rarr;</span></button>
-      <p class="btn__note btn__note--center"><span><span data-spots-remaining>5</span> of <span data-spots-total>5</span> spots left. Spots go to completed forms first.</span></p>
-    </form>
-
-    <div class="confirm" data-panel="confirm" hidden>
-      <h3>Got it &mdash; your spot is claimed.</h3>
-      <p>I&rsquo;ll read everything myself and send your audit to your Instagram DMs within 48 hours. If you don&rsquo;t hear from me in that window, your spot rolls to next week &mdash; no need to resubmit.</p>
-      <p class="confirm__sig">&mdash; Laura</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     SECTION 9 — WAITLIST STATE
-     Replaces Section 8 automatically once 5 spots are full.
-     ============================================================ -->
-<section class="section waitlist" data-panel="waitlist" hidden>
-  <div class="wrap wrap--narrow">
-    <h2 class="section__header">This week&rsquo;s 5 spots are already taken.</h2>
-    <p class="waitlist__body">Join the waitlist and you&rsquo;ll be the first person I message when next week&rsquo;s spots open &mdash; before I post it publicly. Waitlist spots get first access, every time.</p>
-
-    <form class="form form--short" id="waitlist-form" novalidate>
-      <div class="field">
-        <label for="wl-name">Name</label>
-        <input type="text" id="wl-name" name="name" autocomplete="given-name" required>
-      </div>
-      <div class="field">
-        <label for="wl-handle">Instagram handle (or email)</label>
-        <input type="text" id="wl-handle" name="handle" placeholder="@yourhandle" required>
-      </div>
-      <p class="form__error" data-form-error role="alert" hidden></p>
-      <button class="btn btn--primary btn--xl btn--block" type="submit">Join the Waitlist <span aria-hidden="true">&rarr;</span></button>
-    </form>
-
-    <div class="confirm" data-panel="waitlist-confirm" hidden>
-      <h3>You&rsquo;re on the list.</h3>
-      <p>I&rsquo;ll message you directly Monday morning before spots go live.</p>
-      <p class="confirm__sig">&mdash; Laura</p>
-    </div>
-  </div>
-</section>
 
 <!-- ============================================================
      SECTION 10 — FAQ
@@ -450,7 +271,7 @@
       <p>Nothing you&rsquo;re obligated to do. If you want more support after seeing what&rsquo;s possible, I&rsquo;ll tell you about my full 5-Month Clear Skin Blueprint &mdash; but there&rsquo;s zero pressure either way.</p>
     </details>
 
-    <a class="btn btn--primary btn--xl btn--block" href="#claim" data-cta="faq">Claim My Free Spot <span aria-hidden="true">&rarr;</span></a>
+    <a class="btn btn--primary btn--xl btn--block" href="form.html" target="_blank" rel="noopener" data-cta="faq">Claim My Free Spot <span aria-hidden="true">&rarr;</span></a>
   </div>
 </section>
 
@@ -465,7 +286,7 @@
 <div class="stickybar" data-stickybar hidden>
   <div class="stickybar__inner">
     <p><strong><span data-spots-remaining>5</span> of <span data-spots-total>5</span></strong> spots left</p>
-    <a class="btn btn--primary" href="#claim" data-cta="sticky">Claim My Free Spot</a>
+    <a class="btn btn--primary" href="form.html" target="_blank" rel="noopener" data-cta="sticky">Claim My Free Spot</a>
   </div>
 </div>
 
