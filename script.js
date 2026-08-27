@@ -47,6 +47,8 @@
     });
     var stickyCount = $("[data-stickybar] p");
     if (stickyCount) stickyCount.innerHTML = "<strong>Full this week.</strong> Next spots Monday.";
+    var announce = $(".announce__inner span:last-child");
+    if (announce) announce.textContent = "Full this week — waitlist open now";
   }
 
   /* ---------- 3. Countdown to the weekly cutoff ---------- */

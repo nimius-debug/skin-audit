@@ -6,9 +6,6 @@
 <title>Claim Your Spot — Skin by Laura Lo</title>
 <meta name="description" content="About 7 minutes. Tell Laura about your skin, upload your photos, and get your free personalized audit within 48 hours.">
 <meta name="robots" content="noindex">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body class="fx-body">
@@ -29,11 +26,21 @@
        by a question three steps away.
        ============================================================ -->
   <div class="fx-shell" data-panel="wizard">
-    <div class="fx-intro">
-      <h1>Claim your spot</h1>
-      <p>About 7 minutes. If you don&rsquo;t know an answer, say so &mdash; &ldquo;I don&rsquo;t know&rdquo; is a real answer here.</p>
-    </div>
+    <div class="fx-split">
+      <div class="fx-panel--intro">
+        <span class="fx-spots-inline">
+          <span class="dot" aria-hidden="true"></span>
+          <span><span data-spots-remaining>5</span> of <span data-spots-total>5</span> spots left</span>
+        </span>
+        <h1>Claim your spot</h1>
+        <p>About 7 minutes. If you don&rsquo;t know an answer, say so &mdash; &ldquo;I don&rsquo;t know&rdquo; is a real answer here.</p>
+        <div class="fx-reassure">
+          <h4>No AI. No template.</h4>
+          <p>Just Laura, reading your answers herself and building your routine by hand.</p>
+        </div>
+      </div>
 
+      <div class="fx-panel--form">
     <div class="fx-progress">
       <div class="fx-progress__track"><div class="fx-progress__bar" data-fx-bar></div></div>
       <div class="fx-progress__label">
@@ -187,13 +194,15 @@
 
     <div class="fx-nav">
       <button type="button" class="btn btn--back" data-fx-back hidden>&larr; Back</button>
-      <button type="button" class="btn btn--primary" data-fx-next>Next <span aria-hidden="true">&rarr;</span></button>
-      <button type="submit" form="audit-form" class="btn btn--primary" data-fx-submit hidden>Send My Audit to Laura <span aria-hidden="true">&rarr;</span></button>
+      <button type="button" class="btn btn--peach" data-fx-next>Next <span aria-hidden="true">&rarr;</span></button>
+      <button type="submit" form="audit-form" class="btn btn--peach" data-fx-submit hidden>Send My Audit to Laura <span aria-hidden="true">&rarr;</span></button>
+    </div>
+      </div>
     </div>
   </div>
 
   <!-- Shown after a successful submit -->
-  <div class="fx-shell" data-panel="confirm" hidden>
+  <div class="fx-shell fx-shell--narrow" data-panel="confirm" hidden>
     <div class="confirm">
       <h3>Got it &mdash; your spot is claimed.</h3>
       <p>I&rsquo;ll read everything myself and send your audit to your Instagram DMs within 48 hours. If you don&rsquo;t hear from me in that window, your spot rolls to next week &mdash; no need to resubmit.</p>
@@ -206,7 +215,7 @@
        THE WAITLIST — shown instead of the wizard once
        config.js spotsRemaining hits 0.
        ============================================================ -->
-  <div class="fx-shell" data-panel="waitlist" hidden>
+  <div class="fx-shell fx-shell--narrow" data-panel="waitlist" hidden>
     <div class="fx-intro">
       <h1>This week&rsquo;s 5 spots are already taken.</h1>
       <p>Join the waitlist and you&rsquo;ll be the first person I message when next week&rsquo;s spots open &mdash; before I post it publicly. Waitlist spots get first access, every time.</p>
@@ -222,11 +231,11 @@
         <input type="text" id="wl-handle" name="handle" placeholder="@yourhandle" required>
       </div>
       <p class="form__error" data-form-error role="alert" hidden></p>
-      <button class="btn btn--primary btn--xl btn--block" type="submit">Join the Waitlist <span aria-hidden="true">&rarr;</span></button>
+      <button class="btn btn--peach btn--xl btn--block" type="submit">Join the Waitlist <span aria-hidden="true">&rarr;</span></button>
     </form>
   </div>
 
-  <div class="fx-shell" data-panel="waitlist-confirm" hidden>
+  <div class="fx-shell fx-shell--narrow" data-panel="waitlist-confirm" hidden>
     <div class="confirm">
       <h3>You&rsquo;re on the list.</h3>
       <p>I&rsquo;ll message you directly Monday morning before spots go live.</p>

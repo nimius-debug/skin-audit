@@ -9,12 +9,28 @@
 <meta property="og:description" content="Stop buying products that don't work. Get a free personalized skin audit — built for moms.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/laura-hero.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+<!-- Announcement bar — spot count, always visible -->
+<div class="announce">
+  <div class="wrap announce__inner">
+    <span class="dot" aria-hidden="true"></span>
+    <span><span data-spots-remaining>5</span> of <span data-spots-total>5</span> spots open now</span>
+  </div>
+</div>
+
+<!-- Nav -->
+<div class="nav">
+  <div class="nav__inner">
+    <span class="nav__logo">
+      <small>Skin by</small>
+      <strong>Laura Lo</strong>
+    </span>
+    <a class="nav__cta" href="form.html" target="_blank" rel="noopener" data-cta="nav">Claim My Free Spot <span aria-hidden="true">&#8599;</span></a>
+  </div>
+</div>
 
 <!-- ============================================================
      SECTION 1 — HERO
@@ -23,8 +39,8 @@
 <header class="hero" id="top">
   <div class="wrap hero__grid">
     <div class="hero__copy">
-      <p class="eyebrow">Skin by Laura Lo</p>
-      <h1 class="hero__headline">Stop buying products that don&rsquo;t work.</h1>
+      <p class="eyebrow">The Free Mom Skin Audit &middot; By a Licensed Esthetician</p>
+      <h1 class="hero__headline">Stop buying products that <em>don&rsquo;t work.</em></h1>
       <p class="hero__sub">Get a free personalized skin audit &mdash; built for moms.</p>
       <p class="hero__body">Your skin. Finally clearing up.<br>With a routine built just for you.</p>
       <a class="btn btn--primary btn--xl" href="form.html" target="_blank" rel="noopener" data-cta="hero">Claim My Free Spot <span aria-hidden="true">&rarr;</span></a>
@@ -48,6 +64,10 @@
         <!-- REPLACE: assets/laura-before.jpg — Laura's own skin before, bare, natural light, no filter. -->
         <img src="assets/laura-before.svg" alt="Laura's own skin before — breakouts, bare face" width="420" height="420">
       </figure>
+
+      <span class="stamp stamp--hero" aria-hidden="true">
+        <span>Real skin &middot; Real mom &middot; Real guidance</span>
+      </span>
 
       <p class="hero__visual-caption">This was her skin too.</p>
     </div>

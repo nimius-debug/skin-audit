@@ -1,36 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="900" height="620" role="img" aria-label="How to take your three skin photos">
-  <rect width="900" height="620" fill="#FBF6F0"/>
-  <text x="450" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="34" font-weight="700" fill="#1C1714">How to take your 3 photos</text>
-  <text x="450" y="118" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#7A6C63">Bare skin. Natural light. No filter.</text>
+  <rect width="900" height="620" fill="#fbf7f0"/>
+  <text x="450" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="34" font-weight="700" fill="#37231f">How to take your 3 photos</text>
+  <text x="450" y="118" text-anchor="middle" font-family="Avenir Next, Avenir, Helvetica Neue, Arial, sans-serif" font-size="17" fill="#6a5853">Bare skin. Natural light. No filter.</text>
   
   <g transform="translate(150 300)">
     <g transform="rotate(0)">
-      <ellipse cx="0" cy="0" rx="72" ry="94" fill="#F6EDE4" stroke="#C25B45" stroke-width="3.5"/>
-      <circle cx="-26" cy="-14" r="5" fill="#C25B45"/>
-      <circle cx="26" cy="-14" r="5" fill="#C25B45"/>
-      <path d="M-24 40q24 18 48 0" fill="none" stroke="#C25B45" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse cx="0" cy="0" rx="72" ry="94" fill="#eadfd5" stroke="#a55448" stroke-width="3.5"/>
+      <circle cx="-26" cy="-14" r="5" fill="#a55448"/>
+      <circle cx="26" cy="-14" r="5" fill="#a55448"/>
+      <path d="M-24 40q24 18 48 0" fill="none" stroke="#a55448" stroke-width="3.5" stroke-linecap="round"/>
     </g>
-    <text x="0" y="146" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" letter-spacing="1.6" fill="#1C1714">FRONT</text>
+    <text x="0" y="146" text-anchor="middle" font-family="Avenir Next, Avenir, Helvetica Neue, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="1.8" fill="#37231f">FRONT</text>
   </g>
   <g transform="translate(450 300)">
     <g transform="rotate(-22)">
-      <ellipse cx="0" cy="0" rx="72" ry="94" fill="#F6EDE4" stroke="#C25B45" stroke-width="3.5"/>
-      <circle cx="-26" cy="-14" r="5" fill="#C25B45"/>
-      <circle cx="26" cy="-14" r="5" fill="#C25B45"/>
-      <path d="M-24 40q24 18 48 0" fill="none" stroke="#C25B45" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse cx="0" cy="0" rx="72" ry="94" fill="#eadfd5" stroke="#a55448" stroke-width="3.5"/>
+      <circle cx="-26" cy="-14" r="5" fill="#a55448"/>
+      <circle cx="26" cy="-14" r="5" fill="#a55448"/>
+      <path d="M-24 40q24 18 48 0" fill="none" stroke="#a55448" stroke-width="3.5" stroke-linecap="round"/>
     </g>
-    <text x="0" y="146" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" letter-spacing="1.6" fill="#1C1714">LEFT SIDE</text>
+    <text x="0" y="146" text-anchor="middle" font-family="Avenir Next, Avenir, Helvetica Neue, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="1.8" fill="#37231f">LEFT SIDE</text>
   </g>
   <g transform="translate(750 300)">
     <g transform="rotate(22)">
-      <ellipse cx="0" cy="0" rx="72" ry="94" fill="#F6EDE4" stroke="#C25B45" stroke-width="3.5"/>
-      <circle cx="-26" cy="-14" r="5" fill="#C25B45"/>
-      <circle cx="26" cy="-14" r="5" fill="#C25B45"/>
-      <path d="M-24 40q24 18 48 0" fill="none" stroke="#C25B45" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse cx="0" cy="0" rx="72" ry="94" fill="#eadfd5" stroke="#a55448" stroke-width="3.5"/>
+      <circle cx="-26" cy="-14" r="5" fill="#a55448"/>
+      <circle cx="26" cy="-14" r="5" fill="#a55448"/>
+      <path d="M-24 40q24 18 48 0" fill="none" stroke="#a55448" stroke-width="3.5" stroke-linecap="round"/>
     </g>
-    <text x="0" y="146" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" letter-spacing="1.6" fill="#1C1714">RIGHT SIDE</text>
+    <text x="0" y="146" text-anchor="middle" font-family="Avenir Next, Avenir, Helvetica Neue, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="1.8" fill="#37231f">RIGHT SIDE</text>
   </g>
-  <g font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#4A403A">
+  <g font-family="Avenir Next, Avenir, Helvetica Neue, Arial, sans-serif" font-size="17" fill="#5f4f4a">
     <text x="450" y="510" text-anchor="middle">Face a window — never overhead bathroom lights.</text>
     <text x="450" y="542" text-anchor="middle">No makeup, hair pulled back, phone at eye level.</text>
     <text x="450" y="574" text-anchor="middle">Don’t edit, brighten, or smooth them. I need the real thing.</text>

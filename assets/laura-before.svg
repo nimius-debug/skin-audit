@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800" role="img" aria-label="BEFORE — Laura placeholder">
-  <rect width="800" height="800" fill="#EFE1D6"/>
-  <rect x="18" y="18" width="764" height="764" rx="20" fill="none" stroke="#C2A691" stroke-width="3" stroke-dasharray="14 12"/>
-  <g transform="translate(400 310)" stroke="#C25B45" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="-42" y="-30" width="84" height="64" rx="10"/>
+  <rect width="800" height="800" fill="#eadfd5"/>
+  <rect x="1" y="1" width="798" height="798" fill="none" stroke="#a55448" stroke-width="2" stroke-dasharray="10 8"/>
+  <g transform="translate(400 308)" stroke="#a55448" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="-42" y="-30" width="84" height="64"/>
     <circle cx="0" cy="4" r="17"/>
     <path d="M-24 -30l9-13h30l9 13"/>
   </g>
-  <text x="400" y="382" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2.4" fill="#C25B45">REPLACE WITH REAL PHOTO</text>
-  <text x="400" y="416" text-anchor="middle" font-family="Georgia, serif" font-size="26" font-weight="700" fill="#1C1714">BEFORE — Laura</text>
-    <text x="400" y="442" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#7A6C63">Breakouts, bare skin, natural light, no filter.</text>
-    <text x="400" y="468" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#7A6C63">Same distance + same window as the after shot.</text>
-    <text x="400" y="494" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#7A6C63">Save over: assets/laura-before.jpg (square 1:1)</text>
+  <text x="400" y="382" text-anchor="middle" font-family="Avenir Next, Avenir, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="2.6" fill="#a55448">REPLACE WITH REAL PHOTO</text>
+  <text x="400" y="418" text-anchor="middle" font-family="Georgia, serif" font-size="27" font-weight="700" fill="#37231f">BEFORE — Laura</text>
+    <text x="400" y="446" text-anchor="middle" font-family="Avenir Next, Avenir, Helvetica Neue, Arial, sans-serif" font-size="15" fill="#6a5853">Breakouts, bare skin, natural light, no filter.</text>
+    <text x="400" y="470" text-anchor="middle" font-family="Avenir Next, Avenir, Helvetica Neue, Arial, sans-serif" font-size="15" fill="#6a5853">Same distance + same window as the after shot.</text>
+    <text x="400" y="494" text-anchor="middle" font-family="Avenir Next, Avenir, Helvetica Neue, Arial, sans-serif" font-size="15" fill="#6a5853">Save over: assets/laura-before.jpg (square 1:1)</text>
 </svg>
