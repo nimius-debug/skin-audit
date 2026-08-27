@@ -29,6 +29,32 @@ const json = (data, status = 200) =>
     headers: { "Content-Type": "application/json", "Cache-Control": "no-store" }
   });
 
+/** Emails Laura the moment a real submission lands. Called via ctx.waitUntil()
+ *  so it never delays the mom's confirmation screen, and never throws —
+ *  a failed notification must not affect a submission that's already saved. */
+async function notifyLaura(env, { name, handle }) {
+  if (!env.RESEND_API_KEY || !env.NOTIFY_EMAIL) return;   // not configured yet — skip quietly
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        from: env.NOTIFY_FROM || "Skin Audit <onboarding@resend.dev>",
+        to: env.NOTIFY_EMAIL,
+        subject: `New skin audit — ${name} (${handle})`,
+        text: `${name} (${handle}) just claimed a spot.\n\nView it: https://audit.skinbylauralo.com/admin`
+      })
+    });
+    if (!res.ok) console.error("notifyLaura: Resend returned", res.status, await res.text());
+  } catch (err) {
+    console.error("notifyLaura failed:", err);
+  }
+}
+
 /** Monday of the current week, as YYYY-MM-DD — the bucket spots are counted in. */
 function weekOf(date = new Date()) {
   const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
@@ -94,7 +120,7 @@ const esc = (s) => String(s == null ? "" : s)
 
 /* ---------- POST /api/submit ---------- */
 
-async function handleSubmit(request, env) {
+async function handleSubmit(request, env, ctx) {
   const status = await spotsLeft(env);
   if (status.full) {
     return json({ error: "full", message: "This week's spots are already taken." }, 409);
@@ -175,6 +201,7 @@ async function handleSubmit(request, env) {
   }
 
   const after = await spotsLeft(env);
+  ctx.waitUntil(notifyLaura(env, { name: data.name, handle: data.handle }));
   return json({ ok: true, id, remaining: after.remaining });
 }
 
@@ -422,7 +449,7 @@ async function handleExport(request, env) {
 /* ---------- routing ---------- */
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
 
@@ -431,7 +458,7 @@ export default {
 
       if (path === "/api/submit") {
         if (request.method !== "POST") return json({ error: "method" }, 405);
-        return await handleSubmit(request, env);
+        return await handleSubmit(request, env, ctx);
       }
 
       if (path === "/api/waitlist") {

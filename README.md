@@ -61,7 +61,27 @@ npx wrangler secret put ADMIN_PASSWORD   # something long
 Without `ADMIN_PASSWORD` set, `/admin` returns 503 and stays shut — it fails
 closed on purpose, so a missing secret can never expose submissions.
 
-**3. Deploy:**
+**3. (Optional) Email Laura the moment someone claims a spot:**
+
+Create a free [Resend](https://resend.com) account, grab an API key, then:
+
+```bash
+npx wrangler secret put RESEND_API_KEY   # from resend.com/api-keys
+npx wrangler secret put NOTIFY_EMAIL     # the inbox that should get the alert
+```
+
+Without a verified sending domain, Resend's free tier only delivers to the
+email address you signed up with — so for this to work, `NOTIFY_EMAIL` needs
+to match Laura's Resend account email. To send from
+`notifications@skinbylauralo.com` instead of Resend's shared address, or to
+notify a different inbox, verify the domain in Resend's dashboard (a couple
+more DNS records, added the same low-risk way as everything else in this
+project — see the domain notes further down) and set `NOTIFY_FROM` too.
+
+Leave both secrets unset and the Worker just skips the notification —
+nothing else about submissions changes.
+
+**4. Deploy:**
 
 ```bash
 npm install
@@ -79,6 +99,17 @@ in the dashboard under Workers → skin-audit → Settings → Domains.
 - **Download spreadsheet (CSV)** — opens straight in Excel or Google Sheets, one row per mom, with direct photo links.
 - Mark each one **new / reviewed / sent** so she can track what she's answered.
 - Waitlist table and its own CSV underneath.
+
+## Notifying Laura
+
+If `RESEND_API_KEY` and `NOTIFY_EMAIL` are set (see Deploying, above), every
+real submission emails her immediately — subject line names who submitted,
+body links straight to `/admin`. It's fire-and-forget: the Worker hands the
+send to `ctx.waitUntil()` right before responding, so the mom's confirmation
+screen never waits on it, and a failed send (bad key, Resend down) is caught
+and logged without touching her already-saved submission. Waitlist joins
+don't trigger an email — those aren't time-sensitive the way a 48-hour-promise
+submission is; check them via the CSV instead.
 
 ## The spot counter runs itself
 
