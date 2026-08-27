@@ -7,6 +7,9 @@
     "db:schema": "wrangler d1 execute skin-audit-db --remote --file=schema.sql",
     "tail": "wrangler tail"
   },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "devDependencies": {
     "wrangler": "^4.20.0"
   }
