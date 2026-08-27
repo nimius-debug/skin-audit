@@ -23,35 +23,62 @@
   };
 
   /* ---------- 1. Spot counts ---------- */
-  $$("[data-spots-total]").forEach(function (el) { el.textContent = total; });
-  $$("[data-spots-remaining]").forEach(function (el) { el.textContent = remaining; });
+  function paint() {
+    isFull = remaining === 0;
 
-  var pips = $("[data-spot-pips]");
-  if (pips) {
-    for (var i = 0; i < total; i++) {
-      var li = document.createElement("li");
-      li.className = "pip" + (i < remaining ? " pip--open" : " pip--taken");
-      pips.appendChild(li);
+    $$("[data-spots-total]").forEach(function (el) { el.textContent = total; });
+    $$("[data-spots-remaining]").forEach(function (el) { el.textContent = remaining; });
+
+    var pips = $("[data-spot-pips]");
+    if (pips) {
+      pips.innerHTML = "";
+      for (var i = 0; i < total; i++) {
+        var li = document.createElement("li");
+        li.className = "pip" + (i < remaining ? " pip--open" : " pip--taken");
+        pips.appendChild(li);
+      }
+    }
+
+    /* When the week is full, every CTA becomes a waitlist CTA. The link always
+       opens form.html — that page decides for itself which panel to show. */
+    if (isFull) {
+      $$("a[data-cta]").forEach(function (a) {
+        if (a.dataset.swapped) return;
+        a.dataset.swapped = "1";
+        var arrow = a.querySelector("span[aria-hidden]");
+        a.textContent = "Join the Waitlist ";
+        if (arrow) a.appendChild(arrow);
+        else a.insertAdjacentHTML("beforeend", '<span aria-hidden="true">→</span>');
+      });
+      var stickyCount = $("[data-stickybar] p");
+      if (stickyCount) stickyCount.innerHTML = "<strong>Full this week.</strong> Next spots Monday.";
+      var announce = $(".announce__inner span:last-child");
+      if (announce) announce.textContent = "Full this week — waitlist open now";
     }
   }
 
-  /* ---------- 2. When the week is full, every CTA becomes a waitlist CTA ---------- */
-  /* The link always opens form.html — that page decides for itself whether to
-     show the audit form or the waitlist, based on the same config. */
-  if (isFull) {
-    $$("a[data-cta]").forEach(function (a) {
-      var arrow = a.querySelector("span[aria-hidden]");
-      a.textContent = "Join the Waitlist ";
-      if (arrow) a.appendChild(arrow);
-      else a.insertAdjacentHTML("beforeend", '<span aria-hidden="true">→</span>');
-    });
-    var stickyCount = $("[data-stickybar] p");
-    if (stickyCount) stickyCount.innerHTML = "<strong>Full this week.</strong> Next spots Monday.";
-    var announce = $(".announce__inner span:last-child");
-    if (announce) announce.textContent = "Full this week — waitlist open now";
-  }
+  paint();
+
+  /* Correct the static default against the live count from the Worker. */
+  fetch("/api/status")
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (s) {
+      if (!s) return;
+      total = s.total;
+      remaining = s.remaining;
+      paint();
+      if (isFull) stopCountdown();
+    })
+    .catch(function () { /* previewing the file directly — keep the default */ });
 
   /* ---------- 3. Countdown to the weekly cutoff ---------- */
+  var countdownTimer = null;
+  function stopCountdown() {
+    if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+    var el = $("[data-countdown]");
+    if (el) el.hidden = true;
+  }
+
   var countdown = $("[data-countdown]");
   if (countdown && CFG.showCountdown && !isFull) {
     var valueEl = $("[data-countdown-value]", countdown);
@@ -71,7 +98,7 @@
       valueEl.textContent = (d > 0 ? d + "d " : "") + h + "h " + m + "m " + s + "s";
     };
     tick();
-    setInterval(tick, 1000);
+    countdownTimer = setInterval(tick, 1000);
     countdown.hidden = false;
   }
 

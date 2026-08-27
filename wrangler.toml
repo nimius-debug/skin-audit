@@ -1,0 +1,26 @@
+name = "skin-audit"
+main = "worker/index.js"
+compatibility_date = "2025-09-01"
+
+# The static site (index.html, form.html, css, js, assets).
+# Static files are served straight from the edge and do NOT burn Worker requests.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# Answers + waitlist.
+[[d1_databases]]
+binding = "DB"
+database_name = "skin-audit-db"
+database_id = "d143f936-892f-4f35-a5a8-ee52af82d55d"
+
+# Photos. Private bucket — nothing is publicly reachable; the Worker
+# streams images only to an authenticated admin session.
+[[r2_buckets]]
+binding = "PHOTOS"
+bucket_name = "skin-audit-photos"
+
+[vars]
+SPOTS_PER_WEEK = "5"
+# ADMIN_USER / ADMIN_PASSWORD are secrets, not vars — set them with:
+#   npx wrangler secret put ADMIN_PASSWORD
