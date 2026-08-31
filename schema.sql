@@ -36,12 +36,17 @@ CREATE INDEX IF NOT EXISTS idx_submissions_created ON submissions (created_at DE
 -- Spots are controlled from /admin, not reset on a calendar schedule. One
 -- fixed row (id = 1); the Worker seeds it with defaults on first read if
 -- it's ever missing, so this INSERT is a convenience, not a requirement.
+--
+-- "Remaining" is never stored — it's always total_spots minus a live COUNT
+-- of submissions since round_started_at, so it can never drift from what
+-- actually landed in the submissions table. round_started_at moves forward
+-- only when Laura hits "Refill & reopen".
 CREATE TABLE IF NOT EXISTS settings (
-  id              INTEGER PRIMARY KEY CHECK (id = 1),
-  total_spots     INTEGER NOT NULL DEFAULT 5,
-  spots_remaining INTEGER NOT NULL DEFAULT 5,
-  is_open         INTEGER NOT NULL DEFAULT 1
+  id                INTEGER PRIMARY KEY CHECK (id = 1),
+  total_spots       INTEGER NOT NULL DEFAULT 5,
+  is_open           INTEGER NOT NULL DEFAULT 1,
+  round_started_at  TEXT NOT NULL DEFAULT '1970-01-01T00:00:00.000Z'
 );
 
-INSERT OR IGNORE INTO settings (id, total_spots, spots_remaining, is_open)
-VALUES (1, 5, 5, 1);
+INSERT OR IGNORE INTO settings (id, total_spots, is_open, round_started_at)
+VALUES (1, 5, 1, '1970-01-01T00:00:00.000Z');
