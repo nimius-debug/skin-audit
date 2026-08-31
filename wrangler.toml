@@ -20,7 +20,8 @@ database_id = "d143f936-892f-4f35-a5a8-ee52af82d55d"
 binding = "PHOTOS"
 bucket_name = "skin-audit-photos"
 
-[vars]
-SPOTS_PER_WEEK = "5"
+# Spot count (total/remaining/open) lives in D1 now, set from /admin — not
+# a wrangler.toml var. See schema.sql's `settings` table.
+#
 # ADMIN_USER / ADMIN_PASSWORD are secrets, not vars — set them with:
 #   npx wrangler secret put ADMIN_PASSWORD

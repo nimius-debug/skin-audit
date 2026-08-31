@@ -20,7 +20,7 @@
 <main class="fx-main">
 
   <!-- ============================================================
-       THE WIZARD — shown when spots remain this week.
+       THE WIZARD — shown when spots remain in the current round.
        Six short steps, one question group each. Validation only
        checks the step that's on screen, so nothing feels blocked
        by a question three steps away.
@@ -186,7 +186,7 @@
           <input type="checkbox" name="optin" required>
           <span>I agree to receive my audit and any follow-up from Laura via Instagram DM or email. Nothing else &mdash; no newsletters, no spam.</span>
         </label>
-        <p class="fx-step-note"><span data-spots-remaining>5</span> of <span data-spots-total>5</span> spots left this week. Spots go to whoever completes their full form first.</p>
+        <p class="fx-step-note"><span data-spots-remaining>5</span> of <span data-spots-total>5</span> spots left. Spots go to whoever completes their full form first.</p>
       </section>
 
       <p class="form__error" data-form-error role="alert" hidden></p>
@@ -205,7 +205,7 @@
   <div class="fx-shell fx-shell--narrow" data-panel="confirm" hidden>
     <div class="confirm">
       <h3>Got it &mdash; your spot is claimed.</h3>
-      <p>I&rsquo;ll read everything myself and send your audit to whichever you gave me &mdash; Instagram DM or email &mdash; within 48 hours. If you don&rsquo;t hear from me in that window, your spot rolls to next week &mdash; no need to resubmit.</p>
+      <p>I&rsquo;ll read everything myself and send your audit to whichever you gave me &mdash; Instagram DM or email &mdash; within 48 hours. If you don&rsquo;t hear from me in that window, your spot stays reserved &mdash; no need to resubmit.</p>
       <p class="confirm__sig">&mdash; Laura</p>
       <a class="fx-back fx-back--confirm" href="index.html">&larr; Back to the page</a>
     </div>
@@ -217,8 +217,8 @@
        ============================================================ -->
   <div class="fx-shell fx-shell--narrow" data-panel="waitlist" hidden>
     <div class="fx-intro">
-      <h1>This week&rsquo;s 5 spots are already taken.</h1>
-      <p>Join the waitlist and you&rsquo;ll be the first person I message when next week&rsquo;s spots open &mdash; before I post it publicly. Waitlist spots get first access, every time.</p>
+      <h1>This round&rsquo;s 5 spots are already taken.</h1>
+      <p>Join the waitlist and you&rsquo;ll be the first person I message when the next round opens &mdash; before I post it publicly. Waitlist spots get first access, every time.</p>
     </div>
 
     <form class="form form--short" id="waitlist-form" novalidate>
@@ -238,7 +238,7 @@
   <div class="fx-shell fx-shell--narrow" data-panel="waitlist-confirm" hidden>
     <div class="confirm">
       <h3>You&rsquo;re on the list.</h3>
-      <p>I&rsquo;ll message you directly Monday morning before spots go live.</p>
+      <p>I&rsquo;ll message you directly as soon as the next round opens &mdash; before spots go live publicly.</p>
       <p class="confirm__sig">&mdash; Laura</p>
       <a class="fx-back fx-back--confirm" href="index.html">&larr; Back to the page</a>
     </div>
