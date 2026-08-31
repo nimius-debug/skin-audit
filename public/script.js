@@ -1,16 +1,13 @@
 /* The Free Mom Skin Audit — index page behavior.
    The form itself lives on its own page (form.html / form.js).
-   Everything tunable lives in config.js. */
+   Spot counts come from the Worker (/api/status), set from /admin —
+   there's no fixed schedule here, so everything is data-driven. */
 (function () {
   "use strict";
 
   var CFG = Object.assign({
     spotsTotal: 5,
-    spotsRemaining: 5,
-    showCountdown: true,
-    cutoffWeekday: 4,
-    cutoffHour: 23,
-    cutoffMinute: 59
+    spotsRemaining: 5
   }, window.AUDIT_CONFIG || {});
 
   var total = Math.max(0, Number(CFG.spotsTotal) || 0);
@@ -39,8 +36,8 @@
       }
     }
 
-    /* When the week is full, every CTA becomes a waitlist CTA. The link always
-       opens form.html — that page decides for itself which panel to show. */
+    /* When the round is full, every CTA becomes a waitlist CTA. The link
+       always opens form.html — that page decides which panel to show. */
     if (isFull) {
       $$("a[data-cta]").forEach(function (a) {
         if (a.dataset.swapped) return;
@@ -51,9 +48,9 @@
         else a.insertAdjacentHTML("beforeend", '<span aria-hidden="true">→</span>');
       });
       var stickyCount = $("[data-stickybar] p");
-      if (stickyCount) stickyCount.innerHTML = "<strong>Full this week.</strong> Next spots Monday.";
+      if (stickyCount) stickyCount.innerHTML = "<strong>Full for now.</strong> Join the waitlist for the next round.";
       var announce = $(".announce__inner span:last-child");
-      if (announce) announce.textContent = "Full this week — waitlist open now";
+      if (announce) announce.textContent = "Full for now — waitlist open";
     }
   }
 
@@ -67,42 +64,10 @@
       total = s.total;
       remaining = s.remaining;
       paint();
-      if (isFull) stopCountdown();
     })
     .catch(function () { /* previewing the file directly — keep the default */ });
 
-  /* ---------- 3. Countdown to the weekly cutoff ---------- */
-  var countdownTimer = null;
-  function stopCountdown() {
-    if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
-    var el = $("[data-countdown]");
-    if (el) el.hidden = true;
-  }
-
-  var countdown = $("[data-countdown]");
-  if (countdown && CFG.showCountdown && !isFull) {
-    var valueEl = $("[data-countdown-value]", countdown);
-    var tick = function () {
-      var now = new Date();
-      var cutoff = new Date(now);
-      var days = (CFG.cutoffWeekday - now.getDay() + 7) % 7;
-      cutoff.setDate(now.getDate() + days);
-      cutoff.setHours(CFG.cutoffHour, CFG.cutoffMinute, 0, 0);
-      if (cutoff <= now) cutoff.setDate(cutoff.getDate() + 7);
-
-      var ms = cutoff - now;
-      var d = Math.floor(ms / 86400000);
-      var h = Math.floor(ms / 3600000) % 24;
-      var m = Math.floor(ms / 60000) % 60;
-      var s = Math.floor(ms / 1000) % 60;
-      valueEl.textContent = (d > 0 ? d + "d " : "") + h + "h " + m + "m " + s + "s";
-    };
-    tick();
-    countdownTimer = setInterval(tick, 1000);
-    countdown.hidden = false;
-  }
-
-  /* ---------- 4. Sticky mobile CTA, once the hero is out of view ---------- */
+  /* ---------- 2. Sticky mobile CTA, once the hero is out of view ---------- */
   var sticky = $("[data-stickybar]");
   var hero = $(".hero");
   if (sticky && hero && "IntersectionObserver" in window) {

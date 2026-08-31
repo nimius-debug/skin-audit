@@ -111,19 +111,28 @@ and logged without touching her already-saved submission. Waitlist joins
 don't trigger an email — those aren't time-sensitive the way a 48-hour-promise
 submission is; check them via the CSV instead.
 
-## The spot counter runs itself
+## Spots: open until they fill, controlled from /admin
 
-There is no number to edit each week. The Worker counts real submissions
-against the current week (Monday–Sunday) and every counter on the site reads
-from that:
+There's no calendar involved at all — no weekly reset, no fixed schedule.
+One row in D1 (`settings`) holds three things, all editable from the top of
+`/admin`:
 
-- Landing page, form page, announcement bar all fetch `/api/status`.
-- Hitting 5 flips every CTA to "Join the Waitlist" and swaps the form for the waitlist panel automatically.
-- It resets on its own every Monday.
-- If a sixth person is mid-form when the last spot goes, her submit is refused cleanly and she's moved to the waitlist instead of losing her answers.
+| Field | What it is |
+|---|---|
+| **Spots this round** | The cap — how many she's taking right now |
+| **Spots remaining** | Decrements automatically on each real submission; she can also type a new number directly, anytime |
+| **Open for new submissions** | A manual on/off switch, independent of the count above — lets her pause (e.g. going on vacation) without losing track of how many spots were left |
 
-To change the weekly cap, edit `SPOTS_PER_WEEK` in `wrangler.toml` (and
-`spotsTotal` in `public/config.js` so the first paint matches), then redeploy.
+A **"Refill & reopen"** button sets remaining back to the total and flips
+the switch on — the whole mechanic for starting a new round whenever she's
+ready, instead of waiting for a fixed day.
+
+- Landing page, form page, announcement bar all read this live from `/api/status`.
+- Hitting 0 remaining (or flipping the switch off) flips every CTA to "Join the Waitlist" and swaps the form for the waitlist panel automatically.
+- If a sixth person is mid-form when the last spot goes, her submit is refused cleanly (an atomic D1 update guards against two submissions claiming the same last spot) and she's moved to the waitlist instead of losing her answers.
+
+To change the starting cap for future rounds, just type a new number into
+**Spots this round** in `/admin` and hit Save — no redeploy, no code change.
 
 ## Photos
 

@@ -8,11 +8,11 @@
  *   GET  /admin/export.csv    → spreadsheet export (basic auth)
  *   GET  /admin/photo/<key>   → private photo, streamed from R2 (basic auth)
  *   POST /admin/status        → mark a submission new/reviewed/sent (basic auth)
+ *   POST /admin/settings      → set total/remaining spots and open/closed (basic auth)
  *
  * Everything else falls through to the static site in /public.
  */
 
-const SPOTS_PER_WEEK = 5;
 const MAX_PHOTO_BYTES = 8 * 1024 * 1024;   // 8 MB per photo, after client-side compression
 const PHOTO_FIELDS = ["photo_front", "photo_left", "photo_right", "photo_shelfie"];
 
@@ -55,22 +55,28 @@ async function notifyLaura(env, { name, handle }) {
   }
 }
 
-/** Monday of the current week, as YYYY-MM-DD — the bucket spots are counted in. */
-function weekOf(date = new Date()) {
-  const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
-  const dow = (d.getUTCDay() + 6) % 7;          // Mon = 0
-  d.setUTCDate(d.getUTCDate() - dow);
-  return d.toISOString().slice(0, 10);
+/** Spots are a single row Laura controls from /admin — not a calendar bucket.
+ *  Nothing resets on its own; a round stays open until she closes it or the
+ *  count hits zero, and she decides when the next round starts. */
+async function getSettings(env) {
+  const row = await env.DB.prepare(
+    "SELECT total_spots, spots_remaining, is_open FROM settings WHERE id = 1"
+  ).first();
+  if (row) return row;
+
+  // First run — seed the one settings row.
+  const seed = { total_spots: 5, spots_remaining: 5, is_open: 1 };
+  await env.DB.prepare(
+    "INSERT INTO settings (id, total_spots, spots_remaining, is_open) VALUES (1, ?, ?, ?)"
+  ).bind(seed.total_spots, seed.spots_remaining, seed.is_open).run();
+  return seed;
 }
 
 async function spotsLeft(env) {
-  const week = weekOf();
-  const row = await env.DB.prepare(
-    "SELECT COUNT(*) AS n FROM submissions WHERE week_of = ?"
-  ).bind(week).first();
-  const used = (row && row.n) || 0;
-  const total = Number(env.SPOTS_PER_WEEK || SPOTS_PER_WEEK);
-  return { total, remaining: Math.max(0, total - used), full: used >= total };
+  const s = await getSettings(env);
+  const total = Math.max(0, Number(s.total_spots) || 0);
+  const remaining = Math.max(0, Number(s.spots_remaining) || 0);
+  return { total, remaining, full: !s.is_open || remaining <= 0, isOpen: !!s.is_open };
 }
 
 /** Timing-safe string compare, so the admin password can't be probed byte by byte. */
@@ -123,7 +129,7 @@ const esc = (s) => String(s == null ? "" : s)
 async function handleSubmit(request, env, ctx) {
   const status = await spotsLeft(env);
   if (status.full) {
-    return json({ error: "full", message: "This week's spots are already taken." }, 409);
+    return json({ error: "full", message: "This round's spots are already taken." }, 409);
   }
 
   let form;
@@ -147,7 +153,7 @@ async function handleSubmit(request, env, ctx) {
 
   const id = crypto.randomUUID();
   const now = new Date();
-  const week = weekOf(now);
+  const submittedDate = now.toISOString().slice(0, 10);   // just a label — not a gating bucket
 
   // Validate every photo before writing anything, so a bad upload can't
   // leave half a submission's images orphaned in the bucket.
@@ -172,7 +178,7 @@ async function handleSubmit(request, env, ctx) {
     for (const field of PHOTO_FIELDS) {
       const file = photos[field];
       const ext = (file.type.split("/")[1] || "jpg").replace(/[^a-z0-9]/gi, "").slice(0, 5);
-      const key = `${week}/${id}/${field}.${ext}`;
+      const key = `${submittedDate}/${id}/${field}.${ext}`;
       await env.PHOTOS.put(key, file.stream(), {
         httpMetadata: { contentType: file.type }
       });
@@ -187,11 +193,25 @@ async function handleSubmit(request, env, ctx) {
           photo_front, photo_left, photo_right, photo_shelfie)
        VALUES (?,?,?,'new',?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)`
     ).bind(
-      id, now.toISOString(), week,
+      id, now.toISOString(), submittedDate,
       data.name, data.handle, data.concern, data.duration, data.tried, data.result,
       data.morning_routine, data.night_routine, data.after_wash, data.lifestyle,
       keys.photo_front, keys.photo_left, keys.photo_right, keys.photo_shelfie
     ).run();
+
+    // Claim the spot atomically. If someone else took the last one between
+    // the check above and here, this updates zero rows — back the submission
+    // out rather than accept a sixth person into a five-spot round.
+    const claim = await env.DB.prepare(
+      "UPDATE settings SET spots_remaining = spots_remaining - 1 WHERE id = 1 AND is_open = 1 AND spots_remaining > 0"
+    ).run();
+    if (!claim.meta || claim.meta.changes === 0) {
+      await env.DB.prepare("DELETE FROM submissions WHERE id = ?").bind(id).run();
+      for (const key of written) {
+        try { await env.PHOTOS.delete(key); } catch (e) { /* best effort */ }
+      }
+      return json({ error: "full", message: "This round's spots are already taken." }, 409);
+    }
   } catch (err) {
     // Roll the photos back so failed attempts don't accumulate in storage.
     for (const key of written) {
@@ -273,6 +293,19 @@ align-items:center;flex-wrap:wrap;justify-content:space-between}
 padding:6px 8px;background:var(--blush);text-align:center}
 .empty{padding:60px 24px;text-align:center;color:var(--muted)}
 form.inline{display:inline}
+.settings{padding:20px 24px;border-bottom:1px solid var(--border);background:var(--paper);
+display:flex;gap:24px;align-items:flex-end;flex-wrap:wrap}
+.settings form{display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap}
+.settings label{display:flex;flex-direction:column;gap:6px;font-size:10px;
+letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.settings input[type=number]{width:90px;font-size:15px;font-family:inherit;color:var(--wine);
+background:var(--cream);border:1px solid var(--border);padding:9px 10px}
+.settings .toggle{flex-direction:row;align-items:center;gap:8px;font-size:12px}
+.settings .toggle input{width:auto}
+.status-pill{font-size:11px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;
+padding:5px 12px}
+.status-pill--open{background:var(--rose);color:#fff8f4}
+.status-pill--closed{background:var(--border);color:var(--wine)}
 `;
 
 function submissionRow(s) {
@@ -344,8 +377,35 @@ async function handleAdmin(request, env) {
 <title>Skin Audit — Admin</title><style>${ADMIN_CSS}</style></head><body>
 <header>
   <h1>The Free Mom Skin Audit</h1>
-  <span class="meta">${status.remaining} of ${status.total} spots left &middot; week of ${weekOf()}</span>
+  <span class="meta">
+    <span class="status-pill ${status.isOpen ? "status-pill--open" : "status-pill--closed"}">
+      ${status.isOpen ? "Open" : "Closed"}
+    </span>
+    &middot; ${status.remaining} of ${status.total} spots left
+  </span>
 </header>
+
+<div class="settings">
+  <form method="POST" action="/admin/settings">
+    <label>Spots this round
+      <input type="number" name="total_spots" min="0" max="9999" value="${status.total}">
+    </label>
+    <label>Spots remaining
+      <input type="number" name="spots_remaining" min="0" max="9999" value="${status.remaining}">
+    </label>
+    <label class="toggle">
+      <input type="checkbox" name="is_open" ${status.isOpen ? "checked" : ""}>
+      Open for new submissions
+    </label>
+    <button class="btn" type="submit">Save</button>
+  </form>
+  <form method="POST" action="/admin/settings" class="inline">
+    <input type="hidden" name="total_spots" value="${status.total}">
+    <input type="hidden" name="spots_remaining" value="${status.total}">
+    <input type="hidden" name="is_open" value="on">
+    <button class="btn btn--ghost" type="submit">Refill to ${status.total} &amp; reopen</button>
+  </form>
+</div>
 
 <div class="bar">
   <a class="btn" href="/admin/export.csv">Download spreadsheet (CSV)</a>
@@ -404,7 +464,7 @@ async function handleExport(request, env) {
     return new Response(csv, {
       headers: {
         "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition": `attachment; filename="waitlist-${weekOf()}.csv"`,
+        "Content-Disposition": `attachment; filename="waitlist-${new Date().toISOString().slice(0,10)}.csv"`,
         "Cache-Control": "no-store"
       }
     });
@@ -440,7 +500,7 @@ async function handleExport(request, env) {
   return new Response(csv, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="skin-audits-${weekOf()}.csv"`,
+      "Content-Disposition": `attachment; filename="skin-audits-${new Date().toISOString().slice(0,10)}.csv"`,
       "Cache-Control": "no-store"
     }
   });
@@ -493,6 +553,18 @@ export default {
           }
           await env.DB.prepare("UPDATE submissions SET status = ? WHERE id = ?")
             .bind(next, id).run();
+          return Response.redirect(url.origin + "/admin", 303);
+        }
+
+        if (path === "/admin/settings" && request.method === "POST") {
+          const form = await request.formData();
+          const total = Math.max(0, Math.min(9999, parseInt(form.get("total_spots"), 10) || 0));
+          const remaining = Math.max(0, Math.min(9999, parseInt(form.get("spots_remaining"), 10) || 0));
+          const isOpen = form.get("is_open") ? 1 : 0;
+          await getSettings(env);   // make sure the row exists before updating it
+          await env.DB.prepare(
+            "UPDATE settings SET total_spots = ?, spots_remaining = ?, is_open = ? WHERE id = 1"
+          ).bind(total, remaining, isOpen).run();
           return Response.redirect(url.origin + "/admin", 303);
         }
 
