@@ -1,14 +1,15 @@
 /* The Free Mom Skin Audit — API + Laura's admin dashboard.
  *
  * Routes:
- *   GET  /api/status          → { total, remaining, full }
+ *   GET  /api/status          → { total, remaining, claimed, full, isOpen }
  *   POST /api/submit          → store an audit submission (+ 4 photos in R2)
  *   POST /api/waitlist        → store a waitlist signup
  *   GET  /admin               → Laura's dashboard (basic auth)
  *   GET  /admin/export.csv    → spreadsheet export (basic auth)
  *   GET  /admin/photo/<key>   → private photo, streamed from R2 (basic auth)
  *   POST /admin/status        → mark a submission new/reviewed/sent (basic auth)
- *   POST /admin/settings      → set total/remaining spots and open/closed (basic auth)
+ *   POST /admin/settings      → set the spot cap and open/closed (basic auth) —
+ *                               "remaining" is always calculated, never set
  *
  * Everything else falls through to the static site in /public.
  */
@@ -60,23 +61,35 @@ async function notifyLaura(env, { name, handle }) {
  *  count hits zero, and she decides when the next round starts. */
 async function getSettings(env) {
   const row = await env.DB.prepare(
-    "SELECT total_spots, spots_remaining, is_open FROM settings WHERE id = 1"
+    "SELECT total_spots, is_open, round_started_at FROM settings WHERE id = 1"
   ).first();
   if (row) return row;
 
   // First run — seed the one settings row.
-  const seed = { total_spots: 5, spots_remaining: 5, is_open: 1 };
+  const seed = { total_spots: 5, is_open: 1, round_started_at: "1970-01-01T00:00:00.000Z" };
   await env.DB.prepare(
-    "INSERT INTO settings (id, total_spots, spots_remaining, is_open) VALUES (1, ?, ?, ?)"
-  ).bind(seed.total_spots, seed.spots_remaining, seed.is_open).run();
+    "INSERT INTO settings (id, total_spots, is_open, round_started_at) VALUES (1, ?, ?, ?)"
+  ).bind(seed.total_spots, seed.is_open, seed.round_started_at).run();
   return seed;
+}
+
+/** How many real submissions count toward the current round — everything
+ *  since the last "Refill & reopen". This is the only source of truth for
+ *  "remaining": there's no separate counter that can fall out of sync with
+ *  what actually landed in the submissions table. */
+async function claimedCount(env, roundStartedAt) {
+  const row = await env.DB.prepare(
+    "SELECT COUNT(*) as n FROM submissions WHERE created_at >= ?"
+  ).bind(roundStartedAt).first();
+  return row ? Number(row.n) || 0 : 0;
 }
 
 async function spotsLeft(env) {
   const s = await getSettings(env);
   const total = Math.max(0, Number(s.total_spots) || 0);
-  const remaining = Math.max(0, Number(s.spots_remaining) || 0);
-  return { total, remaining, full: !s.is_open || remaining <= 0, isOpen: !!s.is_open };
+  const claimed = await claimedCount(env, s.round_started_at);
+  const remaining = Math.max(0, total - claimed);
+  return { total, remaining, claimed, full: !s.is_open || remaining <= 0, isOpen: !!s.is_open };
 }
 
 /** Timing-safe string compare, so the admin password can't be probed byte by byte. */
@@ -199,13 +212,15 @@ async function handleSubmit(request, env, ctx) {
       keys.photo_front, keys.photo_left, keys.photo_right, keys.photo_shelfie
     ).run();
 
-    // Claim the spot atomically. If someone else took the last one between
-    // the check above and here, this updates zero rows — back the submission
-    // out rather than accept a sixth person into a five-spot round.
-    const claim = await env.DB.prepare(
-      "UPDATE settings SET spots_remaining = spots_remaining - 1 WHERE id = 1 AND is_open = 1 AND spots_remaining > 0"
-    ).run();
-    if (!claim.meta || claim.meta.changes === 0) {
+    // Recount instead of decrementing a separate counter, so "remaining" can
+    // never drift from what's actually in the submissions table. If this
+    // insert pushed the round over its cap (someone else grabbed the last
+    // spot while this one was uploading photos), back it out rather than
+    // accept a sixth person into a five-spot round.
+    const settings = await getSettings(env);
+    const claimed = await claimedCount(env, settings.round_started_at);
+    const total = Math.max(0, Number(settings.total_spots) || 0);
+    if (!settings.is_open || claimed > total) {
       await env.DB.prepare("DELETE FROM submissions WHERE id = ?").bind(id).run();
       for (const key of written) {
         try { await env.PHOTOS.delete(key); } catch (e) { /* best effort */ }
@@ -302,6 +317,7 @@ letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700
 background:var(--cream);border:1px solid var(--border);padding:9px 10px}
 .settings .toggle{flex-direction:row;align-items:center;gap:8px;font-size:12px}
 .settings .toggle input{width:auto}
+.settings-note{font-size:12px;color:var(--muted);line-height:1.6;max-width:280px}
 .status-pill{font-size:11px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;
 padding:5px 12px}
 .status-pill--open{background:var(--rose);color:#fff8f4}
@@ -390,19 +406,20 @@ async function handleAdmin(request, env) {
     <label>Spots this round
       <input type="number" name="total_spots" min="0" max="9999" value="${status.total}">
     </label>
-    <label>Spots remaining
-      <input type="number" name="spots_remaining" min="0" max="9999" value="${status.remaining}">
-    </label>
     <label class="toggle">
       <input type="checkbox" name="is_open" ${status.isOpen ? "checked" : ""}>
       Open for new submissions
     </label>
     <button class="btn" type="submit">Save</button>
   </form>
+  <span class="settings-note">
+    ${status.claimed} claimed this round &middot; ${status.remaining} remaining
+    <br>Remaining is calculated automatically from real submissions — nothing to type in.
+  </span>
   <form method="POST" action="/admin/settings" class="inline">
     <input type="hidden" name="total_spots" value="${status.total}">
-    <input type="hidden" name="spots_remaining" value="${status.total}">
     <input type="hidden" name="is_open" value="on">
+    <input type="hidden" name="reset_round" value="1">
     <button class="btn btn--ghost" type="submit">Refill to ${status.total} &amp; reopen</button>
   </form>
 </div>
@@ -559,12 +576,20 @@ export default {
         if (path === "/admin/settings" && request.method === "POST") {
           const form = await request.formData();
           const total = Math.max(0, Math.min(9999, parseInt(form.get("total_spots"), 10) || 0));
-          const remaining = Math.max(0, Math.min(9999, parseInt(form.get("spots_remaining"), 10) || 0));
           const isOpen = form.get("is_open") ? 1 : 0;
+          const resetRound = form.get("reset_round") ? 1 : 0;
           await getSettings(env);   // make sure the row exists before updating it
-          await env.DB.prepare(
-            "UPDATE settings SET total_spots = ?, spots_remaining = ?, is_open = ? WHERE id = 1"
-          ).bind(total, remaining, isOpen).run();
+          if (resetRound) {
+            // "Refill & reopen" — start a fresh round. Submissions before this
+            // moment stop counting against the cap, so remaining goes back to total.
+            await env.DB.prepare(
+              "UPDATE settings SET total_spots = ?, is_open = ?, round_started_at = ? WHERE id = 1"
+            ).bind(total, isOpen, new Date().toISOString()).run();
+          } else {
+            await env.DB.prepare(
+              "UPDATE settings SET total_spots = ?, is_open = ? WHERE id = 1"
+            ).bind(total, isOpen).run();
+          }
           return Response.redirect(url.origin + "/admin", 303);
         }
 
