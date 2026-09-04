@@ -250,7 +250,8 @@ a { color: var(--mom-rose-deep); }
   border: 1px solid var(--mom-border);
 }
 .hero__photo--main { transform: rotate(2.5deg); z-index: 1; }
-.hero__photo--main img { aspect-ratio: 4 / 5; }
+/* Preserve the supplied family photo, including its text and children. */
+.hero__photo--main img { aspect-ratio: auto; }
 .hero__photo--before {
   position: absolute;
   left: -44px;
@@ -261,7 +262,7 @@ a { color: var(--mom-rose-deep); }
   border: 6px solid var(--mom-cream);
   box-shadow: 6px 6px 0 rgba(55, 35, 31, 0.14);
 }
-.hero__photo--before img { aspect-ratio: 1 / 1; border: 1px solid var(--mom-border); }
+.hero__photo--before img { aspect-ratio: 3 / 4; border: 1px solid var(--mom-border); }
 .hero__tag {
   position: absolute;
   top: 12px;
@@ -329,7 +330,7 @@ a { color: var(--mom-rose-deep); }
   .hero { padding-top: 56px; }
   .hero__grid { grid-template-columns: 1fr; gap: 48px; }
   .hero__visual { order: -1; padding: 12px 10px 60px 40px; }
-  .hero__photo--main img { aspect-ratio: 5 / 4; }
+  .hero__photo--main img { aspect-ratio: auto; }
   .hero__body { max-width: none; }
   .btn--xl { width: 100%; }
   .stamp { width: 104px; height: 104px; }
@@ -383,10 +384,10 @@ a { color: var(--mom-rose-deep); }
 }
 .story__close { font-family: var(--serif); font-weight: 400; color: var(--mom-wine) !important; font-size: 21px; }
 .story__sig { font-family: var(--serif); font-size: 20px; color: var(--mom-wine) !important; }
-.story__photo img { width: 100%; border: 1px solid var(--mom-border); aspect-ratio: 4 / 5; object-fit: cover; }
+.story__photo img { width: 100%; border: 1px solid var(--mom-border); aspect-ratio: auto; }
 @media (max-width: 880px) {
   .story__grid { grid-template-columns: 1fr; gap: 32px; }
-  .story__photo img { aspect-ratio: 3 / 2; }
+  .story__photo img { aspect-ratio: auto; }
 }
 
 /* ============================================================
@@ -397,7 +398,7 @@ a { color: var(--mom-rose-deep); }
 .proof__sub { text-align: center; max-width: 60ch; margin: 0 auto 44px; color: var(--mom-text-soft); font-family: var(--sans); }
 .ba { display: grid; grid-template-columns: 1fr auto 1fr; gap: 28px; align-items: center; }
 .ba__item { margin: 0; position: relative; }
-.ba__item img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border: 1px solid var(--mom-border); background: var(--mom-paper); }
+.ba__item img { width: 100%; aspect-ratio: 3 / 4; object-fit: contain; border: 1px solid var(--mom-border); background: var(--mom-paper); }
 .ba__tag {
   position: absolute;
   top: 14px;
