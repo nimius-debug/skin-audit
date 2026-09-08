@@ -456,6 +456,15 @@ a { color: var(--mom-rose-deep); }
   color: var(--mom-wine);
 }
 .deliverable p, .deliverables p { margin: 0; color: var(--mom-text-soft); font-family: var(--sans); font-size: 16px; line-height: 1.7; }
+.deliverable__list {
+  margin: 14px 0 16px;
+  padding-left: 24px;
+  color: var(--mom-text-soft);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.deliverable__list li + li { margin-top: 7px; }
 .check { color: var(--mom-rose-deep); font-weight: 700; }
 .value {
   font-family: var(--sans);
