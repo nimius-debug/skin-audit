@@ -45,6 +45,7 @@
 
     $$("[required]", scope).forEach(function (el) {
       if (missing) return;
+      if (el.disabled) return;
       if (el.type === "radio") {
         if (groups[el.name]) return;
         groups[el.name] = true;
@@ -56,12 +57,20 @@
       if (!el.value.trim()) missing = el;
     });
 
+    if (!missing) {
+      $$("[data-required-group]", scope).some(function (group) {
+        if ($('input[type="checkbox"]:checked', group)) return false;
+        missing = $('input[type="checkbox"]', group) || group;
+        return true;
+      });
+    }
+
     return missing;
   }
 
   function messageFor(el) {
     if (el.type === "file") return "Please add all four photos — they’re how I actually read your skin.";
-    if (el.type === "checkbox") return "Please tick the box so I’m allowed to DM you your audit.";
+    if (el.type === "checkbox") return "Please complete each required selection or acknowledgment above.";
     if (el.type === "radio") return "Please answer every question above — “I don’t know” counts.";
     return "Please fill in every question above so I can build your audit properly.";
   }
@@ -72,6 +81,38 @@
     var focusable = bad.type === "file" ? bad.closest("[data-upload]") : bad;
     (focusable || bad).scrollIntoView({ behavior: "smooth", block: "center" });
     if (bad.focus) bad.focus({ preventScroll: true });
+  }
+
+  /* ---------- Choice groups and conditional follow-ups ---------- */
+  $$("[data-choice-group]").forEach(function (group) {
+    group.addEventListener("change", function (event) {
+      var changed = event.target;
+      if (!changed || changed.type !== "checkbox" || !changed.checked) return;
+      var choices = $$("input[type=checkbox]", group);
+      if (changed.hasAttribute("data-exclusive-choice")) {
+        choices.forEach(function (choice) {
+          if (choice !== changed) choice.checked = false;
+        });
+      } else {
+        choices.forEach(function (choice) {
+          if (choice.hasAttribute("data-exclusive-choice")) choice.checked = false;
+        });
+      }
+    });
+  });
+
+  function syncConditions(form) {
+    $$("[data-condition-field]", form).forEach(function (box) {
+      var fieldName = box.getAttribute("data-condition-field");
+      var expected = box.getAttribute("data-condition-value");
+      var selected = $('input[name="' + fieldName + '"]:checked', form);
+      var visible = !!selected && selected.value === expected;
+      box.hidden = !visible;
+      $$("input, textarea, select", box).forEach(function (input) {
+        input.disabled = !visible;
+        if (input.hasAttribute("data-required-when-visible")) input.required = visible;
+      });
+    });
   }
 
   /* ---------- Photo handling ----------
@@ -225,6 +266,9 @@
     var errorEl = $("[data-form-error]", form);
     var current = 0;
 
+    form.addEventListener("change", function () { syncConditions(form); });
+    syncConditions(form);
+
     function render() {
       steps.forEach(function (s, i) { s.classList.toggle("is-active", i === current); });
       bar.style.width = ((current + 1) / steps.length * 100) + "%";
@@ -295,3 +339,4 @@
     })
     .catch(function () { /* offline or previewing the file directly — keep the default */ });
 })();
+
