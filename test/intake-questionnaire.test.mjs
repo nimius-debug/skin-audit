@@ -55,4 +55,3 @@ test("the worker persists and exports the versioned intake", () => {
     assert.match(migration, new RegExp(column));
   }
 });
-
