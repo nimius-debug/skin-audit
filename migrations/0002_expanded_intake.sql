@@ -8,4 +8,3 @@ ALTER TABLE submissions ADD COLUMN photo_marketing_consent INTEGER NOT NULL DEFA
 ALTER TABLE submissions ADD COLUMN signature_name TEXT;
 ALTER TABLE submissions ADD COLUMN consent_version TEXT;
 ALTER TABLE submissions ADD COLUMN consented_at TEXT;
-
