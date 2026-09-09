@@ -216,4 +216,3 @@ no filter on either.
 6. The Promises — remove remaining risk
 7. Scarcity/Urgency — convert hesitation
 8. FAQ — mop up last objections
-
