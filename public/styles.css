@@ -871,4 +871,3 @@ input[type="text"]:focus, select:focus, textarea:focus {
   .product-fields { grid-template-columns: 1fr; }
   .chip span { padding: 11px 13px; font-size: 11px; }
 }
-
