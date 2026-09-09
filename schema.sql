@@ -56,4 +56,3 @@ CREATE TABLE IF NOT EXISTS settings (
 
 INSERT OR IGNORE INTO settings (id, total_spots, is_open, round_started_at)
 VALUES (1, 5, 1, '1970-01-01T00:00:00.000Z');
-
