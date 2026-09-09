@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Claim Your Spot — Skin by Laura Lo</title>
-<meta name="description" content="About 7 minutes. Tell Laura about your skin, upload your photos, and get your free personalized audit within 48 hours.">
+<meta name="description" content="About 10–12 minutes. Tell Laura about your skin, products, health considerations, and routine, then upload your photos for a free personalized audit.">
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -24,7 +24,7 @@
 
   <!-- ============================================================
        THE WIZARD — shown when spots remain in the current round.
-       Six short steps, one question group each. Validation only
+       Short steps, one question group each. Validation only
        checks the step that's on screen, so nothing feels blocked
        by a question three steps away.
        ============================================================ -->
@@ -36,7 +36,7 @@
           <span><span data-spots-remaining>5</span> of <span data-spots-total>5</span> spots left</span>
         </span>
         <h1>Claim your spot</h1>
-        <p>About 7 minutes. If you don&rsquo;t know an answer, say so &mdash; &ldquo;I don&rsquo;t know&rdquo; is a real answer here.</p>
+        <p>About 10&ndash;12 minutes. If you don&rsquo;t know an answer, say so &mdash; &ldquo;I don&rsquo;t know&rdquo; is a real answer here.</p>
         <div class="fx-reassure">
           <h4>No AI. No template.</h4>
           <p>Just Laura, reading your answers herself and building your routine by hand.</p>
@@ -47,7 +47,7 @@
     <div class="fx-progress">
       <div class="fx-progress__track"><div class="fx-progress__bar" data-fx-bar></div></div>
       <div class="fx-progress__label">
-        <span data-fx-step-label>Step 1 of 6</span>
+        <span data-fx-step-label>Step 1</span>
         <span data-fx-step-name>Where to send it</span>
       </div>
     </div>
@@ -113,6 +113,49 @@
         </div>
       </section>
 
+      <section class="fx-step" data-step data-step-name="Your products">
+        <h2>Tell me exactly what you&rsquo;re using</h2>
+        <p class="section-intro">Please list the specific <strong>brand and product name or type</strong> for anything you currently use. This helps me review the ingredients and build guidance around your actual products. Leave a field blank if you do not use that type.</p>
+        <div class="product-fields">
+          <div class="field">
+            <label for="product-cleanser">Cleanser / face wash</label>
+            <input type="text" id="product-cleanser" name="product_cleanser" placeholder="Brand + product name">
+          </div>
+          <div class="field">
+            <label for="product-bar-soap">Bar soap</label>
+            <input type="text" id="product-bar-soap" name="product_bar_soap" placeholder="Brand + product name">
+          </div>
+          <div class="field">
+            <label for="product-exfoliant">Face scrub / exfoliant</label>
+            <input type="text" id="product-exfoliant" name="product_exfoliant" placeholder="Brand + product name">
+          </div>
+          <div class="field">
+            <label for="product-toner">Toner</label>
+            <input type="text" id="product-toner" name="product_toner" placeholder="Brand + product name">
+          </div>
+          <div class="field">
+            <label for="product-serums">Serum(s)</label>
+            <input type="text" id="product-serums" name="product_serums" placeholder="Brand + product name(s)">
+          </div>
+          <div class="field">
+            <label for="product-moisturizers">Moisturizer(s)</label>
+            <input type="text" id="product-moisturizers" name="product_moisturizers" placeholder="Brand + product name(s)">
+          </div>
+          <div class="field">
+            <label for="product-sunscreen">Sunscreen</label>
+            <input type="text" id="product-sunscreen" name="product_sunscreen" placeholder="Brand + product name">
+          </div>
+          <div class="field">
+            <label for="product-eye">Eye product(s)</label>
+            <input type="text" id="product-eye" name="product_eye" placeholder="Brand + product name(s)">
+          </div>
+          <div class="field">
+            <label for="product-lip">Lip product(s)</label>
+            <input type="text" id="product-lip" name="product_lip" placeholder="Brand + product name(s)">
+          </div>
+        </div>
+      </section>
+
       <section class="fx-step" data-step data-step-name="Your routine">
         <h2>Your routine right now</h2>
         <div class="field">
@@ -138,6 +181,147 @@
         <div class="field">
           <label for="lifestyle">8. What does your typical day look like &mdash; water, sleep, stress? <span class="optional">optional but helpful</span></label>
           <textarea id="lifestyle" name="lifestyle" rows="3"></textarea>
+        </div>
+      </section>
+
+      <section class="fx-step" data-step data-step-name="Medications & actives">
+        <h2>Medications, sensitivities &amp; strong actives</h2>
+        <div class="field">
+          <label for="allergies">Do you have any known allergies, ingredient sensitivities, or past product reactions?</label>
+          <p class="hint">Please include what happened. Enter N/A if none.</p>
+          <textarea id="allergies" name="allergies" rows="3" required></textarea>
+        </div>
+        <div class="field">
+          <label for="medications">Do you currently take or use any medications?</label>
+          <p class="hint">Include prescription and over-the-counter oral or topical medications. Enter N/A if none.</p>
+          <textarea id="medications" name="medications" rows="3" required></textarea>
+        </div>
+        <div class="field">
+          <span class="label" id="active-use-label">Have you used Retin-A, Renova, adapalene, Accutane, Differin, glycolic acid, lactic acid, mandelic acid, retinol, or another vitamin A derivative?</span>
+          <div class="chips chips--stack" role="radiogroup" aria-labelledby="active-use-label">
+            <label class="chip"><input type="radio" name="active_use" value="Yes, currently using" required><span>Yes, currently using</span></label>
+            <label class="chip"><input type="radio" name="active_use" value="Yes, but not within the last 30 days"><span>Yes, but not within the last 30 days</span></label>
+            <label class="chip"><input type="radio" name="active_use" value="Yes, but not within the last 6 months"><span>Yes, but not within the last 6 months</span></label>
+            <label class="chip"><input type="radio" name="active_use" value="No"><span>No</span></label>
+            <label class="chip"><input type="radio" name="active_use" value="Not sure"><span>Not sure</span></label>
+          </div>
+        </div>
+        <div class="field conditional" data-condition-field="active_use" data-condition-value="Yes, currently using" hidden>
+          <label for="active-details">Please specify the product or type you currently use</label>
+          <textarea id="active-details" name="active_details" rows="3" data-required-when-visible></textarea>
+        </div>
+        <div class="field">
+          <span class="label" id="acne-med-label">Have you used or been prescribed any topical or oral medication for acne control?</span>
+          <div class="chips" role="radiogroup" aria-labelledby="acne-med-label">
+            <label class="chip"><input type="radio" name="acne_medication_use" value="Yes" required><span>Yes</span></label>
+            <label class="chip"><input type="radio" name="acne_medication_use" value="No"><span>No</span></label>
+          </div>
+        </div>
+        <div class="field conditional" data-condition-field="acne_medication_use" data-condition-value="Yes" hidden>
+          <label for="acne-med-details">What did you use, and when did you last use it?</label>
+          <textarea id="acne-med-details" name="acne_medication_details" rows="3" data-required-when-visible></textarea>
+        </div>
+      </section>
+
+      <section class="fx-step" data-step data-step-name="Health & lifestyle">
+        <h2>Health and lifestyle considerations</h2>
+        <fieldset class="field choice-field" data-required-group="health_conditions">
+          <legend>Have you experienced any of these health conditions in the past or present?</legend>
+          <p class="hint">Select all that apply.</p>
+          <div class="chips" data-choice-group>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Hormone imbalance"><span>Hormone imbalance</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Cancer / systemic disease"><span>Cancer / systemic disease</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="High blood pressure"><span>High blood pressure</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Diabetes"><span>Diabetes</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Heart problem"><span>Heart problem</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Arthritis"><span>Arthritis</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Autoimmune disorder"><span>Autoimmune disorder</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Asthma"><span>Asthma</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Epilepsy / seizure disorder"><span>Epilepsy / seizure disorder</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Fever blisters / herpes / frequent cold sores"><span>Fever blisters / herpes / cold sores</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="HIV/AIDS"><span>HIV/AIDS</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Lupus"><span>Lupus</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Depression / anxiety"><span>Depression / anxiety</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Hepatitis"><span>Hepatitis</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Headaches / migraines"><span>Headaches / migraines</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Endometriosis"><span>Endometriosis</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="PCOS"><span>PCOS</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="Other"><span>Other</span></label>
+            <label class="chip"><input type="checkbox" name="health_conditions" value="None" data-exclusive-choice><span>None</span></label>
+          </div>
+        </fieldset>
+        <div class="field">
+          <label for="health-details">If any conditions apply, please provide relevant details. Otherwise enter N/A.</label>
+          <textarea id="health-details" name="health_details" rows="3" required></textarea>
+        </div>
+        <fieldset class="field choice-field" data-required-group="supplements">
+          <legend>Do you take any of these dietary or health supplements?</legend>
+          <p class="hint">Select all that apply.</p>
+          <div class="chips" data-choice-group>
+            <label class="chip"><input type="checkbox" name="supplements" value="Multivitamin"><span>Multivitamin</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="Vitamin C"><span>Vitamin C</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="Vitamin D/D3"><span>Vitamin D/D3</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="Zinc"><span>Zinc</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="Omega 3 / fish oil"><span>Omega 3 / fish oil</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="B complex / B12"><span>B complex / B12</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="Garlic"><span>Garlic</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="Calcium"><span>Calcium</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="Folic acid"><span>Folic acid</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="Melatonin"><span>Melatonin</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="Coenzyme Q10"><span>Coenzyme Q10</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="Biotin"><span>Biotin</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="Other"><span>Other</span></label>
+            <label class="chip"><input type="checkbox" name="supplements" value="None" data-exclusive-choice><span>None</span></label>
+          </div>
+        </fieldset>
+        <div class="field">
+          <label for="supplements-other">Other supplement(s), if any</label>
+          <input type="text" id="supplements-other" name="supplements_other">
+        </div>
+        <div class="field">
+          <span class="label" id="smoking-label">Are you a smoker?</span>
+          <div class="chips" role="radiogroup" aria-labelledby="smoking-label">
+            <label class="chip"><input type="radio" name="smoking_status" value="Yes" required><span>Yes</span></label>
+            <label class="chip"><input type="radio" name="smoking_status" value="No"><span>No</span></label>
+            <label class="chip"><input type="radio" name="smoking_status" value="Social / occasional"><span>Social / occasional</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="label" id="caffeine-label">Do you drink more than four caffeinated beverages per day?</span>
+          <p class="hint">Tea, coffee, soda, or energy drinks.</p>
+          <div class="chips" role="radiogroup" aria-labelledby="caffeine-label">
+            <label class="chip"><input type="radio" name="high_caffeine" value="Yes" required><span>Yes</span></label>
+            <label class="chip"><input type="radio" name="high_caffeine" value="No"><span>No</span></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="fx-step" data-step data-step-name="Hormonal considerations">
+        <h2>Pregnancy and hormonal considerations</h2>
+        <p class="section-intro">Answer only what applies to you. These questions help me avoid inappropriate cosmetic product suggestions; they do not replace medical advice.</p>
+        <div class="field">
+          <span class="label" id="birth-control-label">Are you taking birth control?</span>
+          <div class="chips" role="radiogroup" aria-labelledby="birth-control-label">
+            <label class="chip"><input type="radio" name="birth_control" value="Yes" required><span>Yes</span></label>
+            <label class="chip"><input type="radio" name="birth_control" value="No"><span>No</span></label>
+            <label class="chip"><input type="radio" name="birth_control" value="N/A"><span>N/A</span></label>
+            <label class="chip"><input type="radio" name="birth_control" value="Prefer not to say"><span>Prefer not to say</span></label>
+          </div>
+        </div>
+        <div class="field conditional" data-condition-field="birth_control" data-condition-value="Yes" hidden>
+          <label for="birth-control-type">If yes, what kind?</label>
+          <input type="text" id="birth-control-type" name="birth_control_type" data-required-when-visible>
+        </div>
+        <div class="field">
+          <span class="label" id="pregnancy-label">Which best describes you right now?</span>
+          <div class="chips chips--stack" role="radiogroup" aria-labelledby="pregnancy-label">
+            <label class="chip"><input type="radio" name="pregnancy_status" value="No pregnancy-related consideration" required><span>Not pregnant or trying to become pregnant</span></label>
+            <label class="chip"><input type="radio" name="pregnancy_status" value="Pregnant"><span>Pregnant</span></label>
+            <label class="chip"><input type="radio" name="pregnancy_status" value="Trying to become pregnant"><span>Trying to become pregnant</span></label>
+            <label class="chip"><input type="radio" name="pregnancy_status" value="Recently had a baby and breastfeeding"><span>Recently had a baby and breastfeeding</span></label>
+            <label class="chip"><input type="radio" name="pregnancy_status" value="N/A"><span>N/A</span></label>
+            <label class="chip"><input type="radio" name="pregnancy_status" value="Prefer not to say"><span>Prefer not to say</span></label>
+          </div>
         </div>
       </section>
 
@@ -184,11 +368,42 @@
       </section>
 
       <section class="fx-step" data-step data-step-name="Send it to Laura">
-        <h2>Last thing</h2>
+        <h2>Review and acknowledge</h2>
+        <div class="acknowledgments">
+          <label class="optin">
+            <input type="checkbox" name="adult_acknowledgment" required>
+            <span>I confirm that I am at least 18 years old and that the information I provided is accurate to the best of my knowledge.</span>
+          </label>
+          <label class="optin">
+            <input type="checkbox" name="scope_acknowledgment" required>
+            <span>I understand that this service provides cosmetic skincare education and a personalized routine PDF based on the information and photos I submit. It is not medical care, does not diagnose or treat disease, and does not replace advice from a physician, dermatologist, pharmacist, or other licensed healthcare professional.</span>
+          </label>
+          <label class="optin">
+            <input type="checkbox" name="safety_acknowledgment" required>
+            <span>I confirm that I disclosed relevant allergies, sensitivities, health conditions, pregnancy or breastfeeding status, medications, and prescription or topical treatments. I will check current product labels, follow manufacturer directions, patch-test new products, introduce products gradually, stop use if irritation or another reaction occurs, and seek medical advice when appropriate.</span>
+          </label>
+          <label class="optin">
+            <input type="checkbox" name="results_acknowledgment" required>
+            <span>I understand that results vary and no specific result is guaranteed. Product formulas and availability can change, and I remain responsible for deciding whether to purchase or use any recommended product.</span>
+          </label>
+          <label class="optin">
+            <input type="checkbox" name="privacy_acknowledgment" required>
+            <span>I authorize Skin by Laura Lo to privately review and store my submitted answers and photos to prepare and deliver my routine PDF and provide the included 14-day support, except for any separate optional photo permission I give below.</span>
+          </label>
+        </div>
         <label class="optin">
           <input type="checkbox" name="optin" required>
           <span>I agree to receive my audit and any follow-up from Laura via Instagram DM or email. Nothing else &mdash; no newsletters, no spam.</span>
         </label>
+        <label class="optin optin--optional">
+          <input type="checkbox" name="photo_marketing_consent">
+          <span><strong>Optional photo permission:</strong> I consent to Skin by Laura Lo using my submitted and follow-up before-and-after photos for advertising and promotional purposes. This is not required to receive my audit, and I may withdraw permission for future use by contacting Laura.</span>
+        </label>
+        <div class="field signature-field">
+          <label for="signature-name">Type your full name as your electronic acknowledgment</label>
+          <input type="text" id="signature-name" name="signature_name" autocomplete="name" required>
+          <p class="hint">Your submission records the date and the version of these acknowledgments.</p>
+        </div>
         <p class="fx-step-note"><span data-spots-remaining>5</span> of <span data-spots-total>5</span> spots left. Spots go to whoever completes their full form first.</p>
       </section>
 

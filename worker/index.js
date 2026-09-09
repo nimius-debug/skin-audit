@@ -22,6 +22,32 @@ const TEXT_FIELDS = [
   "morning_routine", "night_routine", "after_wash", "lifestyle"
 ];
 
+const PRODUCT_FIELDS = {
+  cleanser: "product_cleanser",
+  barSoap: "product_bar_soap",
+  exfoliant: "product_exfoliant",
+  toner: "product_toner",
+  serums: "product_serums",
+  moisturizers: "product_moisturizers",
+  sunscreen: "product_sunscreen",
+  eyeProducts: "product_eye",
+  lipProducts: "product_lip"
+};
+
+const INTAKE_TEXT_FIELDS = [
+  "allergies", "medications", "active_use", "active_details",
+  "acne_medication_use", "acne_medication_details", "health_details",
+  "supplements_other", "smoking_status", "high_caffeine", "birth_control",
+  "birth_control_type", "pregnancy_status"
+];
+
+const REQUIRED_ACKNOWLEDGMENTS = [
+  "adult_acknowledgment", "scope_acknowledgment", "safety_acknowledgment",
+  "results_acknowledgment", "privacy_acknowledgment"
+];
+
+const CONSENT_VERSION = "2026-09-09";
+
 /* ---------- helpers ---------- */
 
 const json = (data, status = 200) =>
@@ -157,11 +183,50 @@ async function handleSubmit(request, env, ctx) {
     data[field] = String(form.get(field) || "").trim().slice(0, 4000);
   }
 
+  const currentProducts = {};
+  for (const [key, field] of Object.entries(PRODUCT_FIELDS)) {
+    currentProducts[key] = String(form.get(field) || "").trim().slice(0, 1000);
+  }
+
+  const intake = { currentProducts };
+  for (const field of INTAKE_TEXT_FIELDS) {
+    intake[field] = String(form.get(field) || "").trim().slice(0, 4000);
+  }
+  intake.health_conditions = form.getAll("health_conditions")
+    .map(value => String(value).trim().slice(0, 200)).filter(Boolean).slice(0, 30);
+  intake.supplements = form.getAll("supplements")
+    .map(value => String(value).trim().slice(0, 200)).filter(Boolean).slice(0, 30);
+
   if (!data.name || !data.handle) {
     return json({ error: "missing_contact", message: "Name and Instagram handle or email are required." }, 400);
   }
   if (!form.get("optin")) {
     return json({ error: "missing_optin", message: "The DM opt-in is required." }, 400);
+  }
+  if (REQUIRED_ACKNOWLEDGMENTS.some(field => !form.get(field))) {
+    return json({ error: "missing_acknowledgment", message: "Please complete every required service acknowledgment." }, 400);
+  }
+  const signatureName = String(form.get("signature_name") || "").trim().slice(0, 300);
+  if (!signatureName) {
+    return json({ error: "missing_signature", message: "Please type your full name as your electronic acknowledgment." }, 400);
+  }
+
+  const requiredIntake = [
+    intake.allergies, intake.medications, intake.active_use, intake.acne_medication_use,
+    intake.health_details, intake.smoking_status, intake.high_caffeine,
+    intake.birth_control, intake.pregnancy_status
+  ];
+  if (requiredIntake.some(value => !value) || !intake.health_conditions.length || !intake.supplements.length) {
+    return json({ error: "missing_intake", message: "Please complete every required health and skincare question." }, 400);
+  }
+  if (intake.active_use === "Yes, currently using" && !intake.active_details) {
+    return json({ error: "missing_active_details", message: "Please specify the active product you currently use." }, 400);
+  }
+  if (intake.acne_medication_use === "Yes" && !intake.acne_medication_details) {
+    return json({ error: "missing_acne_medication_details", message: "Please specify the acne medication and when you last used it." }, 400);
+  }
+  if (intake.birth_control === "Yes" && !intake.birth_control_type) {
+    return json({ error: "missing_birth_control_type", message: "Please specify the type of birth control." }, 400);
   }
 
   const id = crypto.randomUUID();
@@ -202,13 +267,16 @@ async function handleSubmit(request, env, ctx) {
     await env.DB.prepare(
       `INSERT INTO submissions
          (id, created_at, week_of, status, name, handle, concern, duration, tried, result,
-          morning_routine, night_routine, after_wash, lifestyle, optin,
-          photo_front, photo_left, photo_right, photo_shelfie)
-       VALUES (?,?,?,'new',?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)`
+          morning_routine, night_routine, after_wash, lifestyle, optin, intake_details,
+          service_acknowledgment, photo_marketing_consent, signature_name, consent_version,
+          consented_at, photo_front, photo_left, photo_right, photo_shelfie)
+       VALUES (?, ?, ?, 'new', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       id, now.toISOString(), submittedDate,
       data.name, data.handle, data.concern, data.duration, data.tried, data.result,
       data.morning_routine, data.night_routine, data.after_wash, data.lifestyle,
+      JSON.stringify(intake), form.get("photo_marketing_consent") ? 1 : 0,
+      signatureName, CONSENT_VERSION, now.toISOString(),
       keys.photo_front, keys.photo_left, keys.photo_right, keys.photo_shelfie
     ).run();
 
@@ -325,6 +393,34 @@ padding:5px 12px}
 .status-pill--closed{background:var(--border);color:var(--wine)}
 `;
 
+const PRODUCT_LABELS = {
+  cleanser: "Cleanser / face wash",
+  barSoap: "Bar soap",
+  exfoliant: "Face scrub / exfoliant",
+  toner: "Toner",
+  serums: "Serum(s)",
+  moisturizers: "Moisturizer(s)",
+  sunscreen: "Sunscreen",
+  eyeProducts: "Eye product(s)",
+  lipProducts: "Lip product(s)"
+};
+
+function parseIntake(value) {
+  try {
+    const parsed = JSON.parse(value || "{}");
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch (_) {
+    return {};
+  }
+}
+
+function formatCurrentProducts(products) {
+  if (!products || typeof products !== "object") return "";
+  return Object.entries(PRODUCT_LABELS)
+    .map(([key, label]) => products[key] ? `${label}: ${products[key]}` : "")
+    .filter(Boolean).join("\n");
+}
+
 function submissionRow(s) {
   const shot = (key, label) => key
     ? `<a href="/admin/photo/${encodeURI(key)}" target="_blank" rel="noopener">
@@ -338,6 +434,7 @@ function submissionRow(s) {
   const when = new Date(s.created_at).toLocaleString("en-US", {
     dateStyle: "medium", timeStyle: "short", timeZone: "America/New_York"
   });
+  const intake = parseIntake(s.intake_details);
 
   return `<details>
     <summary>
@@ -357,6 +454,25 @@ function submissionRow(s) {
         ${qa("6. Night routine", s.night_routine)}
         ${qa("7. 1 hour after washing", s.after_wash)}
         ${qa("8. Typical day", s.lifestyle)}
+        ${qa("Current products", formatCurrentProducts(intake.currentProducts))}
+        ${qa("Known allergies / sensitivities / reactions", intake.allergies)}
+        ${qa("Current medications", intake.medications)}
+        ${qa("Retinoids, exfoliating acids, or other strong actives", intake.active_use)}
+        ${qa("Current active product", intake.active_details)}
+        ${qa("Acne medication history", intake.acne_medication_use)}
+        ${qa("Acne medication and date last used", intake.acne_medication_details)}
+        ${qa("Health conditions", Array.isArray(intake.health_conditions) ? intake.health_conditions.join(", ") : "")}
+        ${qa("Health details", intake.health_details)}
+        ${qa("Supplements", Array.isArray(intake.supplements) ? intake.supplements.join(", ") : "")}
+        ${qa("Other supplements", intake.supplements_other)}
+        ${qa("Smoking", intake.smoking_status)}
+        ${qa("More than 4 caffeinated beverages daily", intake.high_caffeine)}
+        ${qa("Birth control", intake.birth_control)}
+        ${qa("Birth control type", intake.birth_control_type)}
+        ${qa("Pregnancy / breastfeeding", intake.pregnancy_status)}
+        ${qa("Service acknowledgment", s.service_acknowledgment ? `Accepted — version ${s.consent_version || "unknown"} at ${s.consented_at || s.created_at}` : "Not recorded")}
+        ${qa("Electronic acknowledgment", s.signature_name)}
+        ${qa("Optional marketing photo permission", s.photo_marketing_consent ? "Yes" : "No")}
       </dl>
       <div class="shots">
         ${shot(s.photo_front, "Front")}
@@ -493,11 +609,32 @@ async function handleExport(request, env) {
   ).all();
 
   const origin = new URL(request.url).origin;
-  const rows = results.map(s => Object.assign({}, s, {
-    photos: PHOTO_FIELDS
-      .map(f => s[f] ? `${origin}/admin/photo/${s[f]}` : "")
-      .filter(Boolean).join("  ")
-  }));
+  const rows = results.map(s => {
+    const intake = parseIntake(s.intake_details);
+    return Object.assign({}, s, {
+      current_products: formatCurrentProducts(intake.currentProducts),
+      allergies: intake.allergies || "",
+      medications: intake.medications || "",
+      active_use: intake.active_use || "",
+      active_details: intake.active_details || "",
+      acne_medication_use: intake.acne_medication_use || "",
+      acne_medication_details: intake.acne_medication_details || "",
+      health_conditions: Array.isArray(intake.health_conditions) ? intake.health_conditions.join(", ") : "",
+      health_details: intake.health_details || "",
+      supplements: Array.isArray(intake.supplements) ? intake.supplements.join(", ") : "",
+      supplements_other: intake.supplements_other || "",
+      smoking_status: intake.smoking_status || "",
+      high_caffeine: intake.high_caffeine || "",
+      birth_control: intake.birth_control || "",
+      birth_control_type: intake.birth_control_type || "",
+      pregnancy_status: intake.pregnancy_status || "",
+      service_acknowledgment: s.service_acknowledgment ? "Yes" : "No",
+      photo_marketing_consent: s.photo_marketing_consent ? "Yes" : "No",
+      photos: PHOTO_FIELDS
+        .map(f => s[f] ? `${origin}/admin/photo/${s[f]}` : "")
+        .filter(Boolean).join("  ")
+    });
+  });
 
   const csv = toCsv(rows, [
     { key: "created_at", label: "Submitted" },
@@ -512,6 +649,27 @@ async function handleExport(request, env) {
     { key: "night_routine", label: "6. Night routine" },
     { key: "after_wash", label: "7. 1hr after washing" },
     { key: "lifestyle", label: "8. Typical day" },
+    { key: "current_products", label: "Current products" },
+    { key: "allergies", label: "Allergies / sensitivities / reactions" },
+    { key: "medications", label: "Current medications" },
+    { key: "active_use", label: "Strong active use" },
+    { key: "active_details", label: "Current active product" },
+    { key: "acne_medication_use", label: "Acne medication history" },
+    { key: "acne_medication_details", label: "Acne medication details" },
+    { key: "health_conditions", label: "Health conditions" },
+    { key: "health_details", label: "Health details" },
+    { key: "supplements", label: "Supplements" },
+    { key: "supplements_other", label: "Other supplements" },
+    { key: "smoking_status", label: "Smoking" },
+    { key: "high_caffeine", label: "More than 4 caffeinated drinks daily" },
+    { key: "birth_control", label: "Birth control" },
+    { key: "birth_control_type", label: "Birth control type" },
+    { key: "pregnancy_status", label: "Pregnancy / breastfeeding" },
+    { key: "service_acknowledgment", label: "Service acknowledgment" },
+    { key: "signature_name", label: "Electronic acknowledgment" },
+    { key: "consent_version", label: "Consent version" },
+    { key: "consented_at", label: "Consented at" },
+    { key: "photo_marketing_consent", label: "Marketing photo permission" },
     { key: "photos", label: "Photo links" }
   ]);
 

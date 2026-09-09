@@ -546,8 +546,20 @@ a { color: var(--mom-rose-deep); }
    ============================================================ */
 .field { margin-bottom: 26px; }
 .field:last-child { margin-bottom: 0; }
+.choice-field { padding: 0; border: 0; min-width: 0; }
 .field label, .field .label {
   display: block;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 9px;
+  line-height: 1.4;
+  color: var(--mom-wine);
+}
+.choice-field legend {
+  display: block;
+  width: 100%;
+  padding: 0;
   font-family: var(--sans);
   font-weight: 700;
   font-size: 15px;
@@ -558,6 +570,8 @@ a { color: var(--mom-rose-deep); }
 .hint { font-family: var(--sans); font-size: 14px; color: var(--mom-text-muted); margin: -4px 0 10px; }
 .hint a { font-weight: 700; }
 .optional { font-weight: 400; color: var(--mom-text-muted); font-size: 14px; }
+.section-intro { margin: -8px 0 24px; color: var(--mom-text-soft); font-family: var(--sans); font-size: 15px; line-height: 1.65; }
+.product-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; }
 
 input[type="text"], select, textarea {
   width: 100%;
@@ -577,6 +591,7 @@ input[type="text"]:focus, select:focus, textarea:focus {
 }
 
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chips--stack { align-items: flex-start; }
 .chip { position: relative; }
 .chip input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
 .chip span {
@@ -640,6 +655,10 @@ input[type="text"]:focus, select:focus, textarea:focus {
   cursor: pointer;
 }
 .optin input { margin-top: 4px; width: 19px; height: 19px; accent-color: var(--mom-rose-deep); flex: none; }
+.acknowledgments { display: grid; gap: 12px; margin-bottom: 12px; }
+.acknowledgments .optin { margin: 0; }
+.optin--optional { margin-top: 12px; background: var(--mom-panel-stone); }
+.signature-field { margin-top: 24px; }
 
 .form__error {
   margin: 18px 0 0;
@@ -849,4 +868,6 @@ input[type="text"]:focus, select:focus, textarea:focus {
   .fx-brand-logo { width: 112px; }
   .fx-back__label { display: none; }
   .fx-spots { padding: 7px 10px; font-size: 9px; }
+  .product-fields { grid-template-columns: 1fr; }
+  .chip span { padding: 11px 13px; font-size: 11px; }
 }

@@ -81,7 +81,17 @@ project — see the domain notes further down) and set `NOTIFY_FROM` too.
 Leave both secrets unset and the Worker just skips the notification —
 nothing else about submissions changes.
 
-**4. Deploy:**
+**4. Apply database migrations:**
+
+```bash
+npm run db:migrate
+```
+
+This safely adds the expanded intake and consent fields to an existing
+production database. On a brand-new database, `schema.sql` already includes
+the same fields.
+
+**5. Deploy:**
 
 ```bash
 npm install
