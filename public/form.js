@@ -339,4 +339,3 @@
     })
     .catch(function () { /* offline or previewing the file directly — keep the default */ });
 })();
-
