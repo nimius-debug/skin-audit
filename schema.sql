@@ -16,6 +16,12 @@ CREATE TABLE IF NOT EXISTS submissions (
   after_wash      TEXT,
   lifestyle       TEXT,
   optin           INTEGER NOT NULL DEFAULT 0,
+  intake_details  TEXT,
+  service_acknowledgment INTEGER NOT NULL DEFAULT 0,
+  photo_marketing_consent INTEGER NOT NULL DEFAULT 0,
+  signature_name  TEXT,
+  consent_version TEXT,
+  consented_at    TEXT,
   photo_front     TEXT,
   photo_left      TEXT,
   photo_right     TEXT,
@@ -50,3 +56,4 @@ CREATE TABLE IF NOT EXISTS settings (
 
 INSERT OR IGNORE INTO settings (id, total_spots, is_open, round_started_at)
 VALUES (1, 5, 1, '1970-01-01T00:00:00.000Z');
+
