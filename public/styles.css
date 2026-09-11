@@ -423,6 +423,37 @@ a { color: var(--mom-rose-deep); }
 }
 
 /* ============================================================
+   RESULTS — small grid of real client before/afters
+   ============================================================ */
+.results { background: var(--mom-cream); border-top: 1px solid var(--mom-border); }
+.results .section__header { text-align: center; margin-bottom: 12px; }
+.results__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 8px;
+}
+.results__item { margin: 0; }
+.results__item img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  border: 1px solid var(--mom-border);
+  background: var(--mom-paper);
+}
+.results__item figcaption {
+  margin-top: 12px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--mom-text-soft);
+}
+@media (max-width: 760px) {
+  .results__grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+
+/* ============================================================
    SECTION 4 — WHAT YOU GET
    ============================================================ */
 .stack { background: var(--mom-beige); }

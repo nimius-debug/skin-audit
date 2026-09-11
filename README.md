@@ -205,12 +205,24 @@ same folder and update the `src` in `public/index.html` (search `REPLACE`):
 Before and after only work if the framing matches: same distance, same window,
 no filter on either.
 
+## Real client results (index.html, "Real results, real clients.")
+
+`public/assets/transformations/result-1.jpg` through `result-5.jpg` are
+currently gray placeholders — drop the real photos in at those exact
+filenames (same folder, same names) and the section picks them up with no
+other changes needed. Each one is a single image with a client's before
+and after already combined into it (however Laura originally posted it —
+top/bottom, side by side, whatever), displayed whole and uncropped, with a
+short caption underneath. To add a 6th, copy one `<figure class="results__item">`
+block in `index.html` and give it `result-6.jpg`.
+
 ## Page order (index.html)
 
 1. Hero — stop the scroll, state the outcome (with the "before" teaser)
 2. The Pain — make her feel seen
 3. Why Free — trust through shared identity
    - Before/After — proof on Laura's own face
+   - Real Results — more client transformations, proof beyond Laura's own face
 4. What You Get — $425 value stack
 5. How It Works — lower perceived effort
 6. The Promises — remove remaining risk
