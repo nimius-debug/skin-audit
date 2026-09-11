@@ -205,16 +205,18 @@ same folder and update the `src` in `public/index.html` (search `REPLACE`):
 Before and after only work if the framing matches: same distance, same window,
 no filter on either.
 
-## Real client results (index.html, "Real results, real clients.")
+## Real client results ("More real results, from other clients")
 
-`public/assets/transformations/result-1.jpg` through `result-5.jpg` are
-currently gray placeholders — drop the real photos in at those exact
-filenames (same folder, same names) and the section picks them up with no
-other changes needed. Each one is a single image with a client's before
-and after already combined into it (however Laura originally posted it —
-top/bottom, side by side, whatever), displayed whole and uncropped, with a
-short caption underneath. To add a 6th, copy one `<figure class="results__item">`
-block in `index.html` and give it `result-6.jpg`.
+Folded into the bottom of the same section as Laura's own before/after
+(`#proof` in `index.html`) rather than a separate section, so it reads as
+one continuous proof moment instead of two blocks with a big gap between
+them. Currently `public/assets/4.png` through `9.png` — six clients, each
+photo a single image with that client's before-and-after already combined
+into it (however it was originally posted), shown whole and uncropped with
+a short caption underneath rather than re-cropped or re-labeled top/bottom.
+
+To add another one, drop the photo in `public/assets/` and copy one
+`<figure class="results__item">` block in `index.html` for it.
 
 ## Page order (index.html)
 
